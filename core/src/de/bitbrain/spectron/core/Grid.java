@@ -1,5 +1,6 @@
 package de.bitbrain.spectron.core;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -10,17 +11,27 @@ import de.bitbrain.spectron.Colors;
 
 public class Grid {
 
-    public static final float PADDING = 15f;
+    public static final float PADDING = 10f;
 
-    public static final float SCALE = 72f;
+    public static final float SCALE = 64f;
 
     public static class Cell extends Sprite {
 
         private int state;
 
+        private int depth = 4;
+
         public Cell() {
             super(SharedAssetManager.get(Assets.Textures.BLOCK, Texture.class));
             setColor(Colors.EMERALD);
+        }
+
+        public int getDepth() {
+            return depth;
+        }
+
+        public void setDepth(int depth) {
+            this.depth = depth;
         }
 
         public void setState(int state) {
@@ -55,6 +66,11 @@ public class Grid {
                 float cellY = y * cell.getHeight() + getY();
                 float width = cell.getWidth();
                 float height = cell.getHeight();
+                Color color = cell.getColor();
+                cell.setColor(Colors.lighten(color, 0.6f));
+                cell.setBounds(cellX + PADDING * x, cellY + PADDING * y - cell.getDepth(), width, height);
+                cell.draw(batch);
+                cell.setColor(color);
                 cell.setBounds(cellX + PADDING * x, cellY + PADDING * y, width, height);
                 cell.draw(batch);
             }
@@ -62,11 +78,11 @@ public class Grid {
     }
 
     public int getWidth() {
-        return Math.round(xCells * SCALE + PADDING * xCells);
+        return Math.round(xCells * SCALE + PADDING * xCells - PADDING);
     }
 
     public int getHeight() {
-        return Math.round(yCells * SCALE + PADDING * yCells);
+        return Math.round(yCells * SCALE + PADDING * yCells - PADDING);
     }
 
     public void setPosition(float x, float y) {
