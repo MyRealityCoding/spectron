@@ -1,6 +1,8 @@
 package de.bitbrain.spectron.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -22,6 +24,8 @@ public class IngameScreen extends AbstractScreen {
 
     private Grid grid;
 
+    private Sprite sprite;
+
     public IngameScreen(BrainGdxGame game) {
         super(game);
         setBackgroundColor(Colors.DARK_EMERALD);
@@ -31,10 +35,17 @@ public class IngameScreen extends AbstractScreen {
     protected void onCreateStage(Stage stage, int width, int height) {
         grid = new Grid(0, 0, 10, 4, tweenManager);
         grid.setPosition(width / 2f - grid.getWidth() / 2f, 40f);
+        sprite = new Sprite(SharedAssetManager.get(Assets.Textures.BACKGROUND, Texture.class));
+
     }
 
     @Override
     protected void beforeWorldRender(Batch batch, float delta) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
+            grid.setCellColor(2, 2, Color.RED);
+        }
+        sprite.setBounds(0, 0, Config.APP_WIDTH, Config.APP_HEIGHT);
+        sprite.draw(batch);
         grid.render(batch, delta);
     }
 
