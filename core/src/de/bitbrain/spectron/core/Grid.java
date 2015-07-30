@@ -148,10 +148,15 @@ public class Grid {
     }
 
     public void setCellColor(int cellX, int cellY, Color color) {
-        Cell cell = cells[cellX][cellY];
-        Tween.to(cell, CellTween.COLOR_R, 1f).target(color.r).ease(TweenEquations.easeOutCubic).start(tweenManager);
-        Tween.to(cell, CellTween.COLOR_G, 1f).target(color.g).ease(TweenEquations.easeOutCubic).start(tweenManager);
-        Tween.to(cell, CellTween.COLOR_B, 1f).target(color.b).ease(TweenEquations.easeOutCubic).start(tweenManager);
+        if (cellX < cells.length && cellY < cells[cellX].length && cellX >= 0 && cellY >=0) {
+            Cell cell = cells[cellX][cellY];
+            tweenManager.killTarget(cell, CellTween.COLOR_R);
+            tweenManager.killTarget(cell, CellTween.COLOR_G);
+            tweenManager.killTarget(cell, CellTween.COLOR_B);
+            Tween.to(cell, CellTween.COLOR_R, 1f).target(color.r).ease(TweenEquations.easeOutCubic).start(tweenManager);
+            Tween.to(cell, CellTween.COLOR_G, 1f).target(color.g).ease(TweenEquations.easeOutCubic).start(tweenManager);
+            Tween.to(cell, CellTween.COLOR_B, 1f).target(color.b).ease(TweenEquations.easeOutCubic).start(tweenManager);
+        }
     }
 
     public float getX() {
