@@ -13,12 +13,14 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import aurelienribon.tweenengine.Tween;
 import de.bitbrain.braingdx.AbstractScreen;
 import de.bitbrain.braingdx.BrainGdxGame;
+import de.bitbrain.braingdx.GameObject;
 import de.bitbrain.braingdx.assets.SharedAssetManager;
 import de.bitbrain.braingdx.fx.FX;
 import de.bitbrain.braingdx.tweens.SpriteTween;
 import de.bitbrain.spectron.Assets;
 import de.bitbrain.spectron.Colors;
 import de.bitbrain.spectron.Config;
+import de.bitbrain.spectron.core.GameObjectFactory;
 import de.bitbrain.spectron.core.Grid;
 
 public class IngameScreen extends AbstractScreen {
@@ -40,7 +42,10 @@ public class IngameScreen extends AbstractScreen {
         grid.setPosition(width / 2f - grid.getWidth() / 2f, 40f);
         sprite = new Sprite(SharedAssetManager.get(Assets.Textures.BACKGROUND, Texture.class));
         fx.setFadeColor(Color.BLACK);
+        GameObjectFactory factory = new GameObjectFactory(tweenManager, grid, world);
         fx.fadeIn(1.5f);
+        GameObject player1 = factory.createPlayer(1, 1, Colors.ORANGE);
+        GameObject player2 = factory.createPlayer(8, 2, Colors.BLUE);
     }
 
     @Override

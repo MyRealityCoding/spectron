@@ -25,7 +25,7 @@ public class Grid {
 
         private int state;
 
-        private int depth = 6;
+        private float depth = 6;
 
         private float offset = 0;
 
@@ -42,11 +42,11 @@ public class Grid {
             this.offset = offset;
         }
 
-        public int getDepth() {
+        public float getDepth() {
             return depth;
         }
 
-        public void setDepth(int depth) {
+        public void setDepth(float depth) {
             this.depth = depth;
         }
 
@@ -63,6 +63,8 @@ public class Grid {
 
         public static final int OFFSET = 10;
 
+        public static final int DEPTH = 11;
+
 
         @Override
         public int getValues(Sprite target, int tweenType, float[] returnValues) {
@@ -75,6 +77,12 @@ public class Grid {
                         returnValues[0] = ((Cell)target).getOffset();
                     }
                     return 1;
+                case DEPTH:
+                    if (target instanceof Cell) {
+                        returnValues[0] = ((Cell)target).getDepth();
+                    }
+                    return 1;
+
             }
             return 0;
         }
@@ -86,6 +94,11 @@ public class Grid {
                 case OFFSET:
                     if (target instanceof Cell) {
                         ((Cell)target).setOffset(newValues[0]);
+                    }
+                    break;
+                case DEPTH:
+                    if (target instanceof Cell) {
+                        ((Cell)target).setDepth(newValues[0]);
                     }
                     break;
             }
@@ -124,14 +137,43 @@ public class Grid {
                 float height = cell.getHeight();
                 Color color = cell.getColor();
                 cell.setColor(Colors.lighten(color, 0.5f));
-                final float PADDING_Y = PADDING * 1.2f;
-                cell.setBounds(cellX + PADDING * x, cellY + PADDING_Y * y - cell.getDepth(), width, height);
+                final float PADDING_Y = getOffsetY();
+                cell.setBounds(cellX + PADDING * x, cellY + PADDING_Y * y, width, height);
                 cell.draw(batch);
                 cell.setColor(color);
-                cell.setBounds(cellX + PADDING * x, cellY + PADDING_Y * y, width, height);
+                cell.setBounds(cellX + PADDING * x, cellY + PADDING_Y * y + cell.getDepth(), width, height);
                 cell.draw(batch);
             }
         }
+    }
+
+    public void setActive(int cellX, int cellY, boolean active) {
+        if (isInRange(cellX, cellY)) {
+            Cell cell = cells[cellX][cellY];
+            tweenManager.killTarget(cell, CellTween.DEPTH);
+            float targetDepth = active ? 3 : 6;
+            Tween.to(cell, CellTween.DEPTH, 0.5f).target(targetDepth).start(tweenManager);
+        }
+    }
+
+    public int getCellSize() {
+        return Math.round(SCALE);
+    }
+
+    public int getXCells() {
+        return xCells;
+    }
+
+    public int getYCells() {
+        return yCells;
+    }
+
+    public float getOffsetX() {
+        return PADDING;
+    }
+
+    public float getOffsetY() {
+        return PADDING * 1.2f;
     }
 
     public int getWidth() {
@@ -148,7 +190,7 @@ public class Grid {
     }
 
     public void setCellColor(int cellX, int cellY, Color color) {
-        if (cellX < cells.length && cellY < cells[cellX].length && cellX >= 0 && cellY >=0) {
+        if (isInRange(cellX, cellY)) {
             Cell cell = cells[cellX][cellY];
             tweenManager.killTarget(cell, CellTween.COLOR_R);
             tweenManager.killTarget(cell, CellTween.COLOR_G);
@@ -182,5 +224,9 @@ public class Grid {
             }
         }
         return grid;
+    }
+
+    private boolean isInRange(int cellX, int cellY) {
+        return cellX < cells.length && cellY < cells[cellX].length && cellX >= 0 && cellY >= 0;
     }
 }
