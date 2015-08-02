@@ -20,6 +20,7 @@ import de.bitbrain.braingdx.tweens.SpriteTween;
 import de.bitbrain.spectron.Assets;
 import de.bitbrain.spectron.Colors;
 import de.bitbrain.spectron.Config;
+import de.bitbrain.spectron.core.GameObjectController;
 import de.bitbrain.spectron.core.GameObjectFactory;
 import de.bitbrain.spectron.core.Grid;
 
@@ -30,6 +31,8 @@ public class IngameScreen extends AbstractScreen {
     private Sprite sprite;
 
     private FX fx = FX.getInstance();
+
+    private GameObjectController controller;
 
     public IngameScreen(BrainGdxGame game) {
         super(game);
@@ -43,13 +46,25 @@ public class IngameScreen extends AbstractScreen {
         sprite = new Sprite(SharedAssetManager.get(Assets.Textures.BACKGROUND, Texture.class));
         fx.setFadeColor(Color.BLACK);
         GameObjectFactory factory = new GameObjectFactory(tweenManager, grid, world);
+        controller = new GameObjectController(grid, tweenManager, factory);
         fx.fadeIn(1.5f);
-        GameObject player1 = factory.createPlayer(1, 1, Colors.ORANGE);
-        GameObject player2 = factory.createPlayer(8, 2, Colors.BLUE);
+        controller.init();
     }
 
     @Override
     protected void beforeWorldRender(Batch batch, float delta) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
+            controller.move(0, GameObjectController.Move.TOP);
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.A)) {
+            controller.move(0, GameObjectController.Move.LEFT);
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
+            controller.move(0, GameObjectController.Move.BOTTOM);
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
+            controller.move(0, GameObjectController.Move.RIGHT);
+        }
         sprite.setBounds(0, 0, Config.APP_WIDTH, Config.APP_HEIGHT);
         sprite.draw(batch);
         grid.render(batch, delta);
