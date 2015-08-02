@@ -3,6 +3,7 @@ package de.bitbrain.spectron;
 import de.bitbrain.braingdx.AbstractScreen;
 import de.bitbrain.braingdx.BrainGdxGame;
 import de.bitbrain.braingdx.assets.GameAssetLoader;
+import de.bitbrain.spectron.screens.IngameScreen;
 
 public class SpectronGame extends BrainGdxGame {
 	@Override
@@ -12,6 +13,6 @@ public class SpectronGame extends BrainGdxGame {
 
 	@Override
 	protected AbstractScreen getInitialScreen() {
-		return new de.bitbrain.spectron.screens.IngameScreen(this);
+		return new IngameScreen(this);
 	}
 }

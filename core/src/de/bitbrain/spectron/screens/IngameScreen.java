@@ -14,6 +14,7 @@ import aurelienribon.tweenengine.Tween;
 import de.bitbrain.braingdx.AbstractScreen;
 import de.bitbrain.braingdx.BrainGdxGame;
 import de.bitbrain.braingdx.assets.SharedAssetManager;
+import de.bitbrain.braingdx.fx.FX;
 import de.bitbrain.braingdx.tweens.SpriteTween;
 import de.bitbrain.spectron.Assets;
 import de.bitbrain.spectron.Colors;
@@ -26,6 +27,8 @@ public class IngameScreen extends AbstractScreen {
 
     private Sprite sprite;
 
+    private FX fx = FX.getInstance();
+
     public IngameScreen(BrainGdxGame game) {
         super(game);
         setBackgroundColor(Colors.DARK_EMERALD);
@@ -36,7 +39,8 @@ public class IngameScreen extends AbstractScreen {
         grid = new Grid(0, 0, 10, 4, tweenManager);
         grid.setPosition(width / 2f - grid.getWidth() / 2f, 40f);
         sprite = new Sprite(SharedAssetManager.get(Assets.Textures.BACKGROUND, Texture.class));
-
+        fx.setFadeColor(Color.BLACK);
+        fx.fadeIn(1.5f);
     }
 
     @Override
