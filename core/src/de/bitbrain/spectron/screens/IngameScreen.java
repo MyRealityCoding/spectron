@@ -7,7 +7,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import aurelienribon.tweenengine.Tween;
@@ -78,6 +80,6 @@ public class IngameScreen extends AbstractScreen {
 
     @Override
     protected Viewport getViewport(int width, int height) {
-        return new FitViewport(Config.APP_WIDTH, Config.APP_HEIGHT);
+        return new FillViewport(Config.APP_WIDTH, Config.APP_HEIGHT);
     }
 }

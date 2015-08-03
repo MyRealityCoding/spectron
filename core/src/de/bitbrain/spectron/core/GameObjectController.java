@@ -14,6 +14,10 @@ import de.bitbrain.spectron.Colors;
 
 public class GameObjectController {
 
+    private static final float TIME = 0.25f;
+
+    private static final float JUMP_HEIGHT = 45f;
+
     private final TweenManager tweenManager;
 
     private Grid grid;
@@ -72,9 +76,23 @@ public class GameObjectController {
             }  else if (targetY < player.getTop()) {
                 targetY -= grid.getOffsetY();
             }
-            Tween.to(player, GameObjectTween.POS_X, 0.35f).target(targetX).ease(TweenEquations.easeInOutCubic).start(tweenManager);
-            Tween.to(player, GameObjectTween.POS_Y, 0.35f).target(targetY).ease(TweenEquations.easeInOutCubic).start(tweenManager);
+            Tween.to(player, GameObjectTween.POS_X, TIME).target(targetX).ease(TweenEquations.easeInOutCubic).start(tweenManager);
+            Tween.to(player, GameObjectTween.POS_Y, TIME).target(targetY).ease(TweenEquations.easeOutBounce).start(tweenManager);
+            animateJump(player, move);
+        }
+    }
 
+    private void animateJump(GameObject player, Move move) {
+        switch (move) {
+            case LEFT: case RIGHT:
+                Tween.to(player, GameObjectTween.POS_Y, TIME / 2f)
+                     .repeatYoyo(1, 0f)
+                     .ease(TweenEquations.easeInBounce)
+                     .target(player.getTop() + JUMP_HEIGHT)
+                     .start(tweenManager);
+                break;
+            case TOP: case BOTTOM:
+                break;
         }
     }
 }
