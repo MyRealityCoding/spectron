@@ -197,9 +197,9 @@ public class Grid {
             tweenManager.killTarget(cell, CellTween.COLOR_R);
             tweenManager.killTarget(cell, CellTween.COLOR_G);
             tweenManager.killTarget(cell, CellTween.COLOR_B);
-            Tween.to(cell, CellTween.COLOR_R, 1f).target(color.r).ease(TweenEquations.easeOutCubic).start(tweenManager);
-            Tween.to(cell, CellTween.COLOR_G, 1f).target(color.g).ease(TweenEquations.easeOutCubic).start(tweenManager);
-            Tween.to(cell, CellTween.COLOR_B, 1f).target(color.b).ease(TweenEquations.easeOutCubic).start(tweenManager);
+            Tween.to(cell, CellTween.COLOR_R, 0.25f).target(color.r).ease(TweenEquations.easeOutCubic).start(tweenManager);
+            Tween.to(cell, CellTween.COLOR_G, 0.25f).target(color.g).ease(TweenEquations.easeOutCubic).start(tweenManager);
+            Tween.to(cell, CellTween.COLOR_B, 0.25f).target(color.b).ease(TweenEquations.easeOutCubic).start(tweenManager);
         }
     }
 
@@ -209,6 +209,10 @@ public class Grid {
 
     public float getY() {
         return y;
+    }
+
+    public boolean isInRange(float x, float y) {
+        return isInRange(getLocalIndexX(x), getLocalIndexY(y));
     }
 
     private Cell[][] prepare(int width, int height, TweenManager tweenManager) {
@@ -234,11 +238,11 @@ public class Grid {
 
     private int getLocalIndexX(float x) {
         float localX = x - getX();
-        return (int)Math.round(Math.floor(localX / SCALE));
+        return (int)Math.round(Math.floor(localX / (SCALE + PADDING)));
     }
 
     private int getLocalIndexY(float y) {
         float localY = y - getY();
-        return (int)Math.round(Math.floor(localY / SCALE));
+        return (int)Math.round(Math.floor(localY / (SCALE + PADDING)));
     }
 }
