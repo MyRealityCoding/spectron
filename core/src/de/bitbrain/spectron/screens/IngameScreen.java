@@ -55,16 +55,16 @@ public class IngameScreen extends AbstractScreen {
 
     @Override
     protected void beforeWorldRender(Batch batch, float delta) {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             controller.move(0, GameObjectController.Move.TOP);
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.A)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             controller.move(0, GameObjectController.Move.LEFT);
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             controller.move(0, GameObjectController.Move.BOTTOM);
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             controller.move(0, GameObjectController.Move.RIGHT);
         }
         sprite.setBounds(0, 0, Config.APP_WIDTH, Config.APP_HEIGHT);

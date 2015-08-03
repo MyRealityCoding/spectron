@@ -189,7 +189,9 @@ public class Grid {
         this.y = y;
     }
 
-    public void setCellColor(int cellX, int cellY, Color color) {
+    public void setCellColor(float x, float y, Color color) {
+        int cellX = getLocalIndexX(x);
+        int cellY = getLocalIndexY(y);
         if (isInRange(cellX, cellY)) {
             Cell cell = cells[cellX][cellY];
             tweenManager.killTarget(cell, CellTween.COLOR_R);
@@ -228,5 +230,15 @@ public class Grid {
 
     private boolean isInRange(int cellX, int cellY) {
         return cellX < cells.length && cellY < cells[cellX].length && cellX >= 0 && cellY >= 0;
+    }
+
+    private int getLocalIndexX(float x) {
+        float localX = x - getX();
+        return (int)Math.round(Math.floor(localX / SCALE));
+    }
+
+    private int getLocalIndexY(float y) {
+        float localY = y - getY();
+        return (int)Math.round(Math.floor(localY / SCALE));
     }
 }

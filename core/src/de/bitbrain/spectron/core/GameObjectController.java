@@ -16,7 +16,7 @@ public class GameObjectController {
 
     private static final float TIME = 0.25f;
 
-    private static final float JUMP_HEIGHT = 45f;
+    private static final float JUMP_HEIGHT = 65f;
 
     private final TweenManager tweenManager;
 
@@ -78,6 +78,7 @@ public class GameObjectController {
             }
             Tween.to(player, GameObjectTween.POS_X, TIME).target(targetX).ease(TweenEquations.easeInOutCubic).start(tweenManager);
             Tween.to(player, GameObjectTween.POS_Y, TIME).target(targetY).ease(TweenEquations.easeOutBounce).start(tweenManager);
+            grid.setCellColor(targetX, targetY, player.getColor());
             animateJump(player, move);
         }
     }
