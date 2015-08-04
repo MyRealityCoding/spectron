@@ -12,6 +12,7 @@ import de.bitbrain.braingdx.tweens.GameObjectTween;
 import de.bitbrain.spectron.Assets;
 import de.bitbrain.spectron.Colors;
 import de.bitbrain.spectron.Config;
+import de.bitbrain.spectron.graphics.CellRenderer;
 
 public class GameObjectFactory {
 
@@ -23,6 +24,7 @@ public class GameObjectFactory {
         this.world = world;
         this.tweenManager = tweenManager;
         world.registerRenderer(GameObjectType.PLAYER, new SpriteRenderer(Assets.Textures.BLOCK));
+        world.registerRenderer(GameObjectType.CELL, new CellRenderer());
     }
 
     public GameObject createPlayer(int cellX, int cellY, Grid grid, Color color) {
@@ -37,6 +39,15 @@ public class GameObjectFactory {
         object.setColor(color);
         object.setPosition(x, Config.APP_HEIGHT);
         Tween.to(object, GameObjectTween.POS_Y, 0.85f).delay(2.1f).target(y).ease(TweenEquations.easeOutBounce).start(tweenManager);
+        return object;
+    }
+
+    public GameObject createCell() {
+        GameObject object = world.addObject();
+        object.setColor(Colors.EMERALD);
+        object.setType(GameObjectType.CELL);
+        object.setDimensions(Grid.SCALE, Grid.SCALE);
+        object.setOffset(0f, 5f);
         return object;
     }
 }

@@ -81,7 +81,6 @@ public class IngameScreen extends AbstractScreen {
         }
         sprite.setBounds(0, 0, Config.APP_WIDTH, Config.APP_HEIGHT);
         sprite.draw(batch);
-        grid.render(batch, delta);
     }
 
     @Override
