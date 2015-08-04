@@ -117,7 +117,7 @@ public class Grid {
 
     private final TweenManager tweenManager;
 
-    public Grid(float x, float y, int xCells, int yCells, TweenManager tweenManager) {
+    public Grid(float x, float y, int xCells, int yCells, GameObjectFactory factory, TweenManager tweenManager) {
         cells = prepare(xCells, yCells, tweenManager);
         this.x = x;
         this.y = y;
@@ -197,9 +197,9 @@ public class Grid {
             tweenManager.killTarget(cell, CellTween.COLOR_R);
             tweenManager.killTarget(cell, CellTween.COLOR_G);
             tweenManager.killTarget(cell, CellTween.COLOR_B);
-            Tween.to(cell, CellTween.COLOR_R, 0.25f).target(color.r).ease(TweenEquations.easeOutCubic).start(tweenManager);
-            Tween.to(cell, CellTween.COLOR_G, 0.25f).target(color.g).ease(TweenEquations.easeOutCubic).start(tweenManager);
-            Tween.to(cell, CellTween.COLOR_B, 0.25f).target(color.b).ease(TweenEquations.easeOutCubic).start(tweenManager);
+            Tween.to(cell, CellTween.COLOR_R, 0.25f).target(color.r).delay(0.175f).ease(TweenEquations.easeOutCubic).start(tweenManager);
+            Tween.to(cell, CellTween.COLOR_G, 0.25f).target(color.g).delay(0.175f).ease(TweenEquations.easeOutCubic).start(tweenManager);
+            Tween.to(cell, CellTween.COLOR_B, 0.25f).target(color.b).delay(0.175f).ease(TweenEquations.easeOutCubic).start(tweenManager);
         }
     }
 
@@ -233,7 +233,7 @@ public class Grid {
     }
 
     private boolean isInRange(int cellX, int cellY) {
-        return cellX < cells.length && cellY < cells[cellX].length && cellX >= 0 && cellY >= 0;
+        return cellX >= 0 && cellY >= 0 && cellX < cells.length && cellY < cells[cellX].length;
     }
 
     private int getLocalIndexX(float x) {

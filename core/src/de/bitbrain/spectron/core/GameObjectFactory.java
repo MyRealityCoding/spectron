@@ -19,16 +19,13 @@ public class GameObjectFactory {
 
     private GameWorld world;
 
-    private Grid grid;
-
-    public GameObjectFactory(TweenManager tweenManager, Grid grid, GameWorld world) {
+    public GameObjectFactory(TweenManager tweenManager, GameWorld world) {
         this.world = world;
         this.tweenManager = tweenManager;
-        this.grid = grid;
         world.registerRenderer(GameObjectType.PLAYER, new SpriteRenderer(Assets.Textures.BLOCK));
     }
 
-    public GameObject createPlayer(int cellX, int cellY, Color color) {
+    public GameObject createPlayer(int cellX, int cellY, Grid grid, Color color) {
         GameObject object = world.addObject();
         final int SIZE = 48;
         final float OFFSET_X = cellX * grid.getCellSize() + grid.getOffsetX() * cellX;

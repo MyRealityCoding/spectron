@@ -51,8 +51,8 @@ public class GameObjectController {
     }
 
     public void init() {
-        players.add(factory.createPlayer(1, 1, Colors.ORANGE));
-        players.add(factory.createPlayer(8, 2, Colors.BLUE));
+        players.add(factory.createPlayer(1, 1, grid, Colors.ORANGE));
+        players.add(factory.createPlayer(8, 2, grid, Colors.BLUE));
     }
 
     public void move(int playerId, Move move) {
@@ -78,7 +78,7 @@ public class GameObjectController {
             }
             Tween.to(player, GameObjectTween.POS_X, TIME).target(targetX).ease(TweenEquations.easeInOutCubic).start(tweenManager);
             Tween.to(player, GameObjectTween.POS_Y, TIME).target(targetY).ease(TweenEquations.easeOutBounce).start(tweenManager);
-            grid.setCellColor(targetX, targetY, Colors.lighten(player.getColor().cpy(), 0.7f));
+            grid.setCellColor(targetX, targetY, Colors.lighten(player.getColor().cpy(), 0.9f));
             animateJump(player, move);
         }
     }

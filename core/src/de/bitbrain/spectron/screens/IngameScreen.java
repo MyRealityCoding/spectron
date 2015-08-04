@@ -43,11 +43,11 @@ public class IngameScreen extends AbstractScreen {
 
     @Override
     protected void onCreateStage(Stage stage, int width, int height) {
-        grid = new Grid(0, 0, 10, 4, tweenManager);
-        grid.setPosition(width / 2f - grid.getWidth() / 2f, 40f);
         sprite = new Sprite(SharedAssetManager.get(Assets.Textures.BACKGROUND, Texture.class));
         fx.setFadeColor(Color.BLACK);
-        GameObjectFactory factory = new GameObjectFactory(tweenManager, grid, world);
+        GameObjectFactory factory = new GameObjectFactory(tweenManager, world);
+        grid = new Grid(0, 0, 10, 4, factory, tweenManager);
+        grid.setPosition(width / 2f - grid.getWidth() / 2f, 40f);
         controller = new GameObjectController(grid, tweenManager, factory);
         fx.fadeIn(1.5f);
         controller.init();
@@ -66,6 +66,18 @@ public class IngameScreen extends AbstractScreen {
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             controller.move(0, GameObjectController.Move.RIGHT);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+            controller.move(1, GameObjectController.Move.TOP);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+            controller.move(1, GameObjectController.Move.LEFT);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+            controller.move(1, GameObjectController.Move.BOTTOM);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            controller.move(1, GameObjectController.Move.RIGHT);
         }
         sprite.setBounds(0, 0, Config.APP_WIDTH, Config.APP_HEIGHT);
         sprite.draw(batch);
