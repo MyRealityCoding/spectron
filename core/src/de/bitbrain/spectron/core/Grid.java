@@ -12,6 +12,7 @@ import aurelienribon.tweenengine.TweenManager;
 import de.bitbrain.braingdx.GameObject;
 import de.bitbrain.braingdx.assets.SharedAssetManager;
 import de.bitbrain.braingdx.tweens.ColorTween;
+import de.bitbrain.braingdx.tweens.GameObjectTween;
 import de.bitbrain.braingdx.tweens.SpriteTween;
 import de.bitbrain.spectron.Assets;
 import de.bitbrain.spectron.Colors;
@@ -39,7 +40,7 @@ public class Grid {
         this.yCells = yCells;
         this.tweenManager = tweenManager;
         this.factory = factory;
-        cells = prepare(xCells, yCells, tweenManager);
+        prepare(xCells, yCells, tweenManager);
     }
 
     public int getCellSize() {
@@ -73,9 +74,11 @@ public class Grid {
     public void setPosition(float newX, float newY) {
         this.x = newX;
         this.y = newY;
+        int iteration = 0;
         for (int x = 0; x < cells.length; ++x) {
             for (int y = 0; y < cells[x].length; ++y) {
-                cells[x][y].setPosition(x * SCALE + this.x + PADDING * x, y * SCALE + this.y + PADDING * y);
+                prepareCell(x, y, iteration);
+                iteration++;
             }
         }
     }
@@ -92,18 +95,18 @@ public class Grid {
         return isInRange(getLocalIndexX(x), getLocalIndexY(y));
     }
 
-    private GameObject[][] prepare(int width, int height, TweenManager tweenManager) {
-        GameObject[][] grid = new GameObject[width][height];
+    private void prepare(int width, int height, TweenManager tweenManager) {
+        cells = new GameObject[width][height];
         int iteration = 0;
-        for (int x = 0; x < grid.length; ++x) {
-            for (int y = 0; y < grid[x].length; ++y) {
-                grid[x][y] = factory.createCell();
-                grid[x][y].setPosition(x * SCALE + this.x, y * SCALE + this.y);
-                grid[x][y].setZIndex(-iteration);
+        for (int x = 0; x < cells.length; ++x) {
+            for (int y = 0; y < cells[x].length; ++y) {
+                GameObject cell = factory.createCell();
+                cells[x][y] = cell;
+                cells[x][y].setZIndex(-iteration);
+                prepareCell(x, y, iteration);
                 iteration++;
             }
         }
-        return grid;
     }
 
     private boolean isInRange(int cellX, int cellY) {
@@ -118,5 +121,16 @@ public class Grid {
     private int getLocalIndexY(float y) {
         float localY = y - getY();
         return (int)Math.round(Math.floor(localY / (SCALE + PADDING)));
+    }
+
+    private void prepareCell(int x, int y, int iteration) {
+        GameObject cell = cells[x][y];
+        tweenManager.killTarget(cell, GameObjectTween.POS_Y);
+        tweenManager.killTarget(cell, GameObjectTween.ALPHA);
+        float targetY = y * SCALE + this.y + PADDING * y;
+        cell.setPosition(x * SCALE + this.x + PADDING * x, -100);
+        cell.getColor().a = 0.2f;
+        Tween.to(cell, GameObjectTween.POS_Y, 0.7f).target(targetY).delay(iteration * 0.05f).ease(TweenEquations.easeOutElastic).start(tweenManager);
+        Tween.to(cell, GameObjectTween.ALPHA, 0.7f).target(1f).delay(iteration * 0.05f).ease(TweenEquations.easeInOutCubic).start(tweenManager);
     }
 }
