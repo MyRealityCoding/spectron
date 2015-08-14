@@ -96,13 +96,17 @@ public class Grid {
     }
 
     public void setColor(float x, float y, Color color) {
-        GameObject cell = cells[getLocalIndexX(x)][getLocalIndexY(y)];
+        GameObject cell = getCell(x, y);
         tweenManager.killTarget(cell, GameObjectTween.R);
         tweenManager.killTarget(cell, GameObjectTween.G);
         tweenManager.killTarget(cell, GameObjectTween.B);
-        Tween.to(cell, GameObjectTween.R, 0.3f).target(color.r).ease(TweenEquations.easeInCubic).start(tweenManager);
-        Tween.to(cell, GameObjectTween.G, 0.3f).target(color.g).ease(TweenEquations.easeInCubic).start(tweenManager);
-        Tween.to(cell, GameObjectTween.B, 0.3f).target(color.b).ease(TweenEquations.easeInCubic).start(tweenManager);
+        Tween.to(cell, GameObjectTween.R, 0.2f).delay(0.1f).target(color.r).ease(TweenEquations.easeInCubic).start(tweenManager);
+        Tween.to(cell, GameObjectTween.G, 0.2f).delay(0.1f).target(color.g).ease(TweenEquations.easeInCubic).start(tweenManager);
+        Tween.to(cell, GameObjectTween.B, 0.2f).delay(0.1f).target(color.b).ease(TweenEquations.easeInCubic).start(tweenManager);
+    }
+
+    public GameObject getCell(float x, float y) {
+        return cells[getLocalIndexX(x)][getLocalIndexY(y)];
     }
 
     private void prepare(int width, int height, TweenManager tweenManager) {

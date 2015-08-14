@@ -37,8 +37,9 @@ public class GameObjectFactory {
         object.setType(GameObjectType.PLAYER);
         object.setDimensions(SIZE, SIZE);
         object.setColor(color);
-        object.setPosition(x, Config.APP_HEIGHT);
-        Tween.to(object, GameObjectTween.POS_Y, 0.85f).delay(2.1f).target(y).ease(TweenEquations.easeOutBounce).start(tweenManager);
+        object.setPosition(x, y);
+        object.setOffset(0f, Config.APP_HEIGHT);
+        Tween.to(object, GameObjectTween.OFFSET_Y, 0.85f).delay(2.1f).target(0).ease(TweenEquations.easeOutBounce).start(tweenManager);
         return object;
     }
 

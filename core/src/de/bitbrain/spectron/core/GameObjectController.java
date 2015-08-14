@@ -5,7 +5,9 @@ import com.badlogic.gdx.math.Vector2;
 import java.util.ArrayList;
 import java.util.List;
 
+import aurelienribon.tweenengine.BaseTween;
 import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.TweenCallback;
 import aurelienribon.tweenengine.TweenEquations;
 import aurelienribon.tweenengine.TweenManager;
 import de.bitbrain.braingdx.GameObject;
@@ -53,6 +55,8 @@ public class GameObjectController {
     public void init() {
         players.add(factory.createPlayer(1, 1, grid, Colors.ORANGE));
         players.add(factory.createPlayer(8, 2, grid, Colors.BLUE));
+        updateColor(players.get(0));
+        updateColor(players.get(1));
     }
 
     public void move(int playerId, Move move) {
@@ -83,17 +87,21 @@ public class GameObjectController {
         }
     }
 
-    private void animateJump(GameObject player, Move move) {
+    private void animateJump(final GameObject player, Move move) {
         switch (move) {
             case LEFT: case RIGHT:
                 Tween.to(player, GameObjectTween.POS_Y, TIME / 2f)
-                     .repeatYoyo(1, 0f)
-                     .ease(TweenEquations.easeInCubic)
-                     .target(player.getTop() + JUMP_HEIGHT)
+                        .repeatYoyo(1, 0f)
+                        .ease(TweenEquations.easeInCubic)
+                        .target(player.getTop() + JUMP_HEIGHT)
                      .start(tweenManager);
                 break;
             case TOP: case BOTTOM:
                 break;
         }
+    }
+
+    private void updateColor(GameObject player) {
+        grid.setColor(player.getLeft(), player.getTop(), player.getColor());
     }
 }
