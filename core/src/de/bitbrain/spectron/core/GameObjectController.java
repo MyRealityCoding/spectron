@@ -106,10 +106,10 @@ public class GameObjectController {
     private void animateJump(final GameObject player, Move move) {
         switch (move) {
             case LEFT: case RIGHT:
-                Tween.to(player, GameObjectTween.POS_Y, TIME / 2f)
+                Tween.to(player, GameObjectTween.OFFSET_Y, TIME / 2f)
                         .repeatYoyo(1, 0f)
                         .ease(TweenEquations.easeInCubic)
-                        .target(player.getTop() + JUMP_HEIGHT)
+                        .target(JUMP_HEIGHT)
                         .setCallbackTriggers(TweenCallback.COMPLETE)
                         .setCallback(new TweenCallback() {
                             @Override

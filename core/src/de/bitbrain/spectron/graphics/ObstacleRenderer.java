@@ -16,7 +16,7 @@ public class ObstacleRenderer extends SpriteRenderer {
 
     @Override
     public void render(GameObject gameObject, Batch batch, float v) {
-        sprite.setPosition(gameObject.getLeft(), gameObject.getTop() - 5f);
+        sprite.setPosition(gameObject.getLeft(), gameObject.getTop() - 4f);
         sprite.setColor(0f, 0f, 0f, 0.2f);
         sprite.setSize(gameObject.getWidth(), gameObject.getHeight() / 3f);
         sprite.setOrigin(sprite.getWidth() / 2f, sprite.getHeight() / 2f);
