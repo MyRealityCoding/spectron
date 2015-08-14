@@ -100,9 +100,9 @@ public class Grid {
         tweenManager.killTarget(cell, GameObjectTween.R);
         tweenManager.killTarget(cell, GameObjectTween.G);
         tweenManager.killTarget(cell, GameObjectTween.B);
-        Tween.to(cell, GameObjectTween.R, 0.2f).delay(0.1f).target(color.r).ease(TweenEquations.easeInCubic).start(tweenManager);
-        Tween.to(cell, GameObjectTween.G, 0.2f).delay(0.1f).target(color.g).ease(TweenEquations.easeInCubic).start(tweenManager);
-        Tween.to(cell, GameObjectTween.B, 0.2f).delay(0.1f).target(color.b).ease(TweenEquations.easeInCubic).start(tweenManager);
+        Tween.to(cell, GameObjectTween.R, 0.3f).target(color.r).ease(TweenEquations.easeInCubic).start(tweenManager);
+        Tween.to(cell, GameObjectTween.G, 0.3f).target(color.g).ease(TweenEquations.easeInCubic).start(tweenManager);
+        Tween.to(cell, GameObjectTween.B, 0.3f).target(color.b).ease(TweenEquations.easeInCubic).start(tweenManager);
     }
 
     public GameObject getCell(float x, float y) {
