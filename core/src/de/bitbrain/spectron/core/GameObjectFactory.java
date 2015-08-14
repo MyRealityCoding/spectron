@@ -13,6 +13,7 @@ import de.bitbrain.spectron.Assets;
 import de.bitbrain.spectron.Colors;
 import de.bitbrain.spectron.Config;
 import de.bitbrain.spectron.graphics.CellRenderer;
+import de.bitbrain.spectron.graphics.ObstacleRenderer;
 
 public class GameObjectFactory {
 
@@ -23,7 +24,7 @@ public class GameObjectFactory {
     public GameObjectFactory(TweenManager tweenManager, GameWorld world) {
         this.world = world;
         this.tweenManager = tweenManager;
-        world.registerRenderer(GameObjectType.PLAYER, new SpriteRenderer(Assets.Textures.BLOCK));
+        world.registerRenderer(GameObjectType.PLAYER, new ObstacleRenderer(Assets.Textures.BLOCK));
         world.registerRenderer(GameObjectType.CELL, new CellRenderer());
     }
 
