@@ -95,6 +95,16 @@ public class Grid {
         return isInRange(getLocalIndexX(x), getLocalIndexY(y));
     }
 
+    public void setColor(float x, float y, Color color) {
+        GameObject cell = cells[getLocalIndexX(x)][getLocalIndexY(y)];
+        tweenManager.killTarget(cell, GameObjectTween.R);
+        tweenManager.killTarget(cell, GameObjectTween.G);
+        tweenManager.killTarget(cell, GameObjectTween.B);
+        Tween.to(cell, GameObjectTween.R, 0.3f).target(color.r).ease(TweenEquations.easeInCubic).start(tweenManager);
+        Tween.to(cell, GameObjectTween.G, 0.3f).target(color.g).ease(TweenEquations.easeInCubic).start(tweenManager);
+        Tween.to(cell, GameObjectTween.B, 0.3f).target(color.b).ease(TweenEquations.easeInCubic).start(tweenManager);
+    }
+
     private void prepare(int width, int height, TweenManager tweenManager) {
         cells = new GameObject[width][height];
         int iteration = 0;
@@ -114,22 +124,24 @@ public class Grid {
     }
 
     private int getLocalIndexX(float x) {
-        float localX = x - getX();
-        return (int)Math.round(Math.floor(localX / (SCALE + PADDING)));
+        float localX = Math.max(0f, x - getX());
+        int index = (int)Math.round(Math.floor(localX / (SCALE + PADDING)));
+        return index <= getXCells() - 1 ? index : getXCells() - 1;
     }
 
     private int getLocalIndexY(float y) {
-        float localY = y - getY();
-        return (int)Math.round(Math.floor(localY / (SCALE + PADDING)));
+        float localY = Math.max(0f, y - getY());
+        int index = (int)Math.round(Math.floor(localY / (SCALE + PADDING)));
+        return index <= getYCells() - 1 ? index : getYCells() - 1;
     }
 
     private void prepareCell(int x, int y, int iteration) {
         GameObject cell = cells[x][y];
         tweenManager.killTarget(cell, GameObjectTween.POS_Y);
         tweenManager.killTarget(cell, GameObjectTween.ALPHA);
-        float targetY = y * SCALE + this.y + PADDING * y;
-        cell.setPosition(x * SCALE + this.x + PADDING * x, -100);
-        cell.getColor().a = 0.2f;
+        float targetY = y * SCALE + this.y + PADDING * y - cell.getOffset().y;
+        cell.setPosition(x * SCALE + this.x + PADDING * x, -60);
+        cell.getColor().a = 0.0f;
         Tween.to(cell, GameObjectTween.POS_Y, 0.7f).target(targetY).delay(iteration * 0.05f).ease(TweenEquations.easeOutElastic).start(tweenManager);
         Tween.to(cell, GameObjectTween.ALPHA, 0.7f).target(1f).delay(iteration * 0.05f).ease(TweenEquations.easeInOutCubic).start(tweenManager);
     }

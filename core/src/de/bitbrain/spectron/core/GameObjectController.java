@@ -16,7 +16,7 @@ public class GameObjectController {
 
     private static final float TIME = 0.25f;
 
-    private static final float JUMP_HEIGHT = 65f;
+    private static final float JUMP_HEIGHT = 75f;
 
     private final TweenManager tweenManager;
 
@@ -79,6 +79,7 @@ public class GameObjectController {
             Tween.to(player, GameObjectTween.POS_X, TIME).target(targetX).ease(TweenEquations.easeInOutCubic).start(tweenManager);
             Tween.to(player, GameObjectTween.POS_Y, TIME).target(targetY).ease(TweenEquations.easeOutBounce).start(tweenManager);
             animateJump(player, move);
+            grid.setColor(targetX, targetY, player.getColor());
         }
     }
 
@@ -87,7 +88,7 @@ public class GameObjectController {
             case LEFT: case RIGHT:
                 Tween.to(player, GameObjectTween.POS_Y, TIME / 2f)
                      .repeatYoyo(1, 0f)
-                     .ease(TweenEquations.easeInBounce)
+                     .ease(TweenEquations.easeInCubic)
                      .target(player.getTop() + JUMP_HEIGHT)
                      .start(tweenManager);
                 break;
