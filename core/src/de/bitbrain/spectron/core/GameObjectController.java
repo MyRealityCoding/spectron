@@ -23,7 +23,7 @@ public class GameObjectController {
 
     private static final float TIME = 0.25f;
 
-    private static final float JUMP_HEIGHT = 75f;
+    private static final float JUMP_HEIGHT = 55f;
 
     private final TweenManager tweenManager;
 
@@ -88,42 +88,33 @@ public class GameObjectController {
             }  else if (targetY < player.getTop()) {
                 targetY -= grid.getOffsetY();
             }
-            Tween.to(player, GameObjectTween.POS_X, TIME).target(targetX).ease(TweenEquations.easeInOutCubic).setCallbackTriggers(TweenCallback.COMPLETE).setCallback(new TweenCallback() {
-
-                @Override
-                public void onEvent(int type, BaseTween<?> source) {
-                    if (move.equals(Move.TOP) || move.equals(Move.BOTTOM)) {
-                        events.fire(EventType.PLAYER_JUMPED, player);
-                    }
-                }
-            }).start(tweenManager);
-            Tween.to(player, GameObjectTween.POS_Y, TIME).target(targetY).ease(TweenEquations.easeOutBounce).start(tweenManager);
-            animateJump(player, move);
+            if (targetX != player.getLeft()) {
+                Tween.to(player, GameObjectTween.POS_X, TIME).target(targetX).ease(TweenEquations.easeOutCubic).start(tweenManager);
+            }
+            if (targetY != player.getTop()) {
+                Tween.to(player, GameObjectTween.POS_Y, TIME).target(targetY).ease(TweenEquations.easeOutCubic).start(tweenManager);
+            }
+            animateJump(player);
             if (grid.isInRange(targetX, targetY)) {
                 grid.setColor(targetX, targetY, player.getColor());
             }
         }
     }
 
-    private void animateJump(final GameObject player, Move move) {
-        switch (move) {
-            case LEFT: case RIGHT:
-                Tween.to(player, GameObjectTween.OFFSET_Y, TIME / 2f)
-                        .repeatYoyo(1, 0f)
-                        .ease(TweenEquations.easeInCubic)
-                        .target(JUMP_HEIGHT)
-                        .setCallbackTriggers(TweenCallback.COMPLETE)
-                        .setCallback(new TweenCallback() {
-                            @Override
-                            public void onEvent(int type, BaseTween<?> source) {
-                                events.fire(EventType.PLAYER_JUMPED, player);
-                            }
-                        })
-                     .start(tweenManager);
-                break;
-            case TOP: case BOTTOM:
-                break;
-        }
+    private void animateJump(final GameObject player) {
+        tweenManager.killTarget(player, GameObjectTween.OFFSET_Y);
+        Tween.to(player, GameObjectTween.OFFSET_Y, TIME / 3)
+                .repeatYoyo(1, 0f)
+                .ease(TweenEquations.easeOutCubic)
+                .target(JUMP_HEIGHT)
+                .setCallbackTriggers(TweenCallback.COMPLETE)
+                .setCallback(new TweenCallback() {
+                    @Override
+                    public void onEvent(int type, BaseTween<?> source) {
+                        events.fire(EventType.PLAYER_JUMPED, player);
+                    }
+                })
+                .start(tweenManager);
     }
 
     private void updateColor(GameObject player) {
