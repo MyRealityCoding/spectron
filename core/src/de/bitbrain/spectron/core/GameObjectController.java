@@ -36,6 +36,8 @@ public class GameObjectController {
 
     private Events events = Events.getInstance();
 
+    private boolean initialized = false;
+
     public static enum Move {
         LEFT(-1, 0),
         TOP(0, 1),
@@ -66,9 +68,23 @@ public class GameObjectController {
         players.add(factory.createPlayer(8, 2, grid, Colors.BLUE));
         updateColor(players.get(0));
         updateColor(players.get(1));
+
+        players.get(0).setOffset(0f, Config.APP_HEIGHT);
+        Tween.to(players.get(0), GameObjectTween.OFFSET_Y, 0.85f).delay(0.7f).target(0).ease(TweenEquations.easeOutBounce).start(tweenManager);
+        players.get(1).setOffset(0f, Config.APP_HEIGHT);
+        Tween.to(players.get(1), GameObjectTween.OFFSET_Y, 0.85f).delay(1.65f).target(0).ease(TweenEquations.easeOutBounce).setCallbackTriggers(TweenCallback.COMPLETE).setCallback(new TweenCallback() {
+
+            @Override
+            public void onEvent(int type, BaseTween<?> source) {
+                initialized = true;
+            }
+        }).start(tweenManager);
     }
 
     public void move(int playerId, final Move move) {
+        if (!initialized) {
+            return;
+        }
         if (players.size() > playerId && playerId >= 0) {
             final GameObject player = players.get(playerId);
             if (tweenManager.containsTarget(player, GameObjectTween.POS_X)) {
