@@ -17,6 +17,7 @@ import de.bitbrain.braingdx.GameObject;
 import de.bitbrain.braingdx.event.Events;
 import de.bitbrain.braingdx.tweens.GameObjectTween;
 import de.bitbrain.spectron.Colors;
+import de.bitbrain.spectron.Config;
 import de.bitbrain.spectron.event.EventType;
 
 public class GameObjectController {
@@ -88,6 +89,9 @@ public class GameObjectController {
             }  else if (targetY < player.getTop()) {
                 targetY -= grid.getOffsetY();
             }
+            if (!grid.isInRange(player.getLeft(), player.getTop())) {
+                return;
+            }
             if (targetX != player.getLeft()) {
                 Tween.to(player, GameObjectTween.POS_X, TIME).target(targetX).ease(TweenEquations.easeOutCubic).start(tweenManager);
             }
@@ -139,6 +143,10 @@ public class GameObjectController {
                             .target(playerTarget).repeatYoyo(1, 0f).ease(TweenEquations.easeOutCubic)
                             .start(tweenManager);
                 }
+            } else {
+                float targetY = player.getTop() - Config.APP_HEIGHT;
+                player.setZIndex(-100);
+                Tween.to(player, GameObjectTween.POS_Y, 0.6f).target(targetY).ease(TweenEquations.easeNone).start(tweenManager);
             }
         }
     }
