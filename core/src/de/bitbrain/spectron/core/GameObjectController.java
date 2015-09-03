@@ -127,16 +127,18 @@ public class GameObjectController {
             GameObject player = (GameObject) event.getPrimaryParam();
             if (grid.isInRange(player.getLeft(), player.getTop())) {
                 GameObject cell = grid.getCell(player.getLeft(), player.getTop());
-                final float cellTarget = cell.getTop() - 10f;
-                final float playerTarget = player.getTop() - 10f;
-                tweenManager.killTarget(player, GameObjectTween.POS_Y);
-                tweenManager.killTarget(cell, GameObjectTween.POS_Y);
-                Tween.to(cell, GameObjectTween.POS_Y, 0.08f)
-                        .target(cellTarget).repeatYoyo(1, 0f).ease(TweenEquations.easeOutCubic)
-                        .start(tweenManager);
-                Tween.to(player, GameObjectTween.POS_Y, 0.08f)
-                        .target(playerTarget).repeatYoyo(1, 0f).ease(TweenEquations.easeOutCubic)
-                        .start(tweenManager);
+                if (cell != null) {
+                    final float cellTarget = cell.getTop() - 10f;
+                    final float playerTarget = player.getTop() - 10f;
+                    tweenManager.killTarget(player, GameObjectTween.POS_Y);
+                    tweenManager.killTarget(cell, GameObjectTween.POS_Y);
+                    Tween.to(cell, GameObjectTween.POS_Y, 0.08f)
+                            .target(cellTarget).repeatYoyo(1, 0f).ease(TweenEquations.easeOutCubic)
+                            .start(tweenManager);
+                    Tween.to(player, GameObjectTween.POS_Y, 0.08f)
+                            .target(playerTarget).repeatYoyo(1, 0f).ease(TweenEquations.easeOutCubic)
+                            .start(tweenManager);
+                }
             }
         }
     }

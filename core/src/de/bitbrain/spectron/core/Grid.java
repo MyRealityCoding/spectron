@@ -106,7 +106,11 @@ public class Grid {
     }
 
     public GameObject getCell(float x, float y) {
-        return cells[getLocalIndexX(x)][getLocalIndexY(y)];
+        if (isInRange(x, y)) {
+            return cells[getLocalIndexX(x)][getLocalIndexY(y)];
+        } else {
+            return null;
+        }
     }
 
     private void prepare(int width, int height, TweenManager tweenManager) {
@@ -128,15 +132,15 @@ public class Grid {
     }
 
     private int getLocalIndexX(float x) {
-        float localX = Math.max(0f, x - getX());
+        float localX = x - getX();
         int index = (int)Math.round(Math.floor(localX / (SCALE + PADDING)));
-        return index <= getXCells() - 1 ? index : getXCells() - 1;
+        return index;
     }
 
     private int getLocalIndexY(float y) {
-        float localY = Math.max(0f, y - getY());
+        float localY = y - getY();
         int index = (int)Math.round(Math.floor(localY / (SCALE + PADDING)));
-        return index <= getYCells() - 1 ? index : getYCells() - 1;
+        return index;
     }
 
     private void prepareCell(int x, int y, int iteration) {
