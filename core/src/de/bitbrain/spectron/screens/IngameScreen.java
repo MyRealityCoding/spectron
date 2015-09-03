@@ -79,14 +79,17 @@ public class IngameScreen extends AbstractScreen {
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             controller.move(1, GameObjectController.Move.RIGHT);
         }
-        sprite.setBounds(0, 0, Config.APP_WIDTH, Config.APP_HEIGHT);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
+            fx.shake(40, 2f);
+        }
+        sprite.setBounds(camera.position.x - Config.APP_WIDTH / 2f, camera.position.y - Config.APP_HEIGHT / 2f, Config.APP_WIDTH, Config.APP_HEIGHT);
         sprite.draw(batch);
     }
 
     @Override
     protected void afterWorldRender(Batch batch, float delta) {
         Texture overlay = SharedAssetManager.get(Assets.Textures.OVERLAY, Texture.class);
-        batch.draw(overlay, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        batch.draw(overlay, camera.position.x - Config.APP_WIDTH / 2f, camera.position.y - Config.APP_HEIGHT / 2f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
 
     @Override

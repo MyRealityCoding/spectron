@@ -153,4 +153,15 @@ public class Grid {
         Tween.to(cell, GameObjectTween.POS_Y, 0.7f).target(targetY).delay(iteration * 0.05f).ease(TweenEquations.easeOutElastic).start(tweenManager);
         Tween.to(cell, GameObjectTween.ALPHA, 0.7f).target(1f).delay(iteration * 0.05f).ease(TweenEquations.easeInOutCubic).start(tweenManager);
     }
+
+    public void cleanUp() {
+        int iteration = 0;
+        for (int x = 0; x < cells.length; ++x) {
+            for (int y = 0; y < cells[x].length; ++y) {
+                GameObject cell = cells[x][y];
+                Tween.to(cell, GameObjectTween.SCALE, 0.2f).target(0).delay(iteration * 0.01f).start(tweenManager);
+                iteration++;
+            }
+        }
+    }
 }

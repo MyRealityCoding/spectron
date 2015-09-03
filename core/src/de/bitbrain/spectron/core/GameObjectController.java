@@ -144,7 +144,7 @@ public class GameObjectController {
     @Handler
     public void onPlayerJump(Events.GdxEvent event) {
         if (event.isTypeOf(EventType.PLAYER_JUMPED)) {
-            GameObject player = (GameObject) event.getPrimaryParam();
+            final GameObject player = (GameObject) event.getPrimaryParam();
             if (grid.isInRange(player.getLeft(), player.getTop())) {
                 GameObject cell = grid.getCell(player.getLeft(), player.getTop());
                 if (cell != null) {
@@ -160,9 +160,26 @@ public class GameObjectController {
                             .start(tweenManager);
                 }
             } else {
-                float targetY = player.getTop() - Config.APP_HEIGHT;
+                float targetY = player.getTop() - Config.APP_HEIGHT / 1.5f;
                 player.setZIndex(-100);
-                Tween.to(player, GameObjectTween.POS_Y, 0.6f).target(targetY).ease(TweenEquations.easeNone).start(tweenManager);
+                Tween.to(player, GameObjectTween.POS_Y, 0.3f).target(targetY).ease(TweenEquations.easeNone).setCallbackTriggers(TweenCallback.COMPLETE).setCallback(new TweenCallback() {
+
+                    @Override
+                    public void onEvent(int type, BaseTween<?> source) {
+                        events.fire(EventType.GAME_OVER, player);
+                    }
+                }).start(tweenManager);
+            }
+        }
+    }
+
+    @Handler
+    public void onGameOver(Events.GdxEvent event) {
+        if (event.isTypeOf(EventType.GAME_OVER)) {
+            this.initialized = false;
+            grid.cleanUp();
+            for (GameObject player : players) {
+                Tween.to(player, GameObjectTween.SCALE, 0.2f).target(0f).ease(TweenEquations.easeOutQuad).start(tweenManager);
             }
         }
     }
