@@ -16,11 +16,11 @@ public class ObstacleRenderer extends SpriteRenderer {
 
     @Override
     public void render(GameObject gameObject, Batch batch, float v) {
+        float scale = (1.1f + gameObject.getOffset().y / 200f) * gameObject.getScale().x;
         sprite.setPosition(gameObject.getLeft(), gameObject.getTop() - 2f);
-        sprite.setColor(0f, 0f, 0f, 0.25f);
+        sprite.setColor(0f, 0f, 0f, 0.2f + (10f - scale / 80f));
         sprite.setSize(gameObject.getWidth(), gameObject.getHeight() / 3f);
         sprite.setOrigin(sprite.getWidth() / 2f, sprite.getHeight() / 2f);
-        float scale = (1.1f + gameObject.getOffset().y / 200f) * gameObject.getScale().x;
         sprite.setScale(scale, scale * 1.2f);
         sprite.draw(batch);
         sprite.setScale(1f);
