@@ -10,16 +10,24 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import net.engio.mbassy.listener.Handler;
+
+import java.util.Map;
+
+import aurelienribon.tweenengine.Tween;
 import de.bitbrain.braingdx.AbstractScreen;
 import de.bitbrain.braingdx.BrainGdxGame;
 import de.bitbrain.braingdx.assets.SharedAssetManager;
+import de.bitbrain.braingdx.event.Events;
 import de.bitbrain.braingdx.fx.FX;
+import de.bitbrain.braingdx.tweens.ColorTween;
 import de.bitbrain.spectron.Assets;
 import de.bitbrain.spectron.Colors;
 import de.bitbrain.spectron.Config;
 import de.bitbrain.spectron.core.GameObjectController;
 import de.bitbrain.spectron.core.GameObjectFactory;
 import de.bitbrain.spectron.core.Grid;
+import de.bitbrain.spectron.util.ColorDistributionUtil;
 
 public class IngameScreen extends AbstractScreen {
 
@@ -30,6 +38,12 @@ public class IngameScreen extends AbstractScreen {
     private FX fx = FX.getInstance();
 
     private GameObjectController controller;
+
+    private Color backgroundColor;
+
+    private Events events = Events.getInstance();
+
+    private ColorDistributionUtil colorDistributionUtil = ColorDistributionUtil.getInstance();
 
     public IngameScreen(BrainGdxGame game) {
         super(game);
@@ -45,7 +59,9 @@ public class IngameScreen extends AbstractScreen {
         grid.setPosition(width / 2f - grid.getWidth() / 2f, 40f);
         controller = new GameObjectController(grid, tweenManager, factory);
         fx.fadeIn(1.5f);
+        backgroundColor = Color.WHITE;
         controller.init();
+        events.register(this);
     }
 
     @Override
@@ -78,17 +94,35 @@ public class IngameScreen extends AbstractScreen {
             fx.shake(40, 2f);
         }
         sprite.setBounds(camera.position.x - Config.APP_WIDTH / 2f, camera.position.y - Config.APP_HEIGHT / 2f, Config.APP_WIDTH, Config.APP_HEIGHT);
+        sprite.setColor(getColorByDistribution());
         sprite.draw(batch);
     }
 
     @Override
     protected void afterWorldRender(Batch batch, float delta) {
         Texture overlay = SharedAssetManager.get(Assets.Textures.OVERLAY, Texture.class);
+        batch.setColor(getColorByDistribution());
         batch.draw(overlay, camera.position.x - Config.APP_WIDTH / 2f, camera.position.y - Config.APP_HEIGHT / 2f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
 
     @Override
     protected Viewport getViewport(int width, int height) {
         return new FillViewport(Config.APP_WIDTH, Config.APP_HEIGHT);
+    }
+
+    @Handler
+    public void onColorChange(Events.GdxEvent event) {
+        Color color = Color.WHITE.cpy();
+        for (Map.Entry<Color, Integer> entry : colorDistributionUtil.getDistribution().entrySet()) {
+            float totalCells = grid.getXCells() * grid.getYCells();
+            color.lerp(entry.getKey(), (float)entry.getValue() / totalCells);
+        }
+        Tween.to(backgroundColor, ColorTween.R, 0.5f).target(color.r).start(tweenManager);
+        Tween.to(backgroundColor, ColorTween.G, 0.5f).target(color.g).start(tweenManager);
+        Tween.to(backgroundColor, ColorTween.B, 0.5f).target(color.b).start(tweenManager);
+    }
+
+    private Color getColorByDistribution() {
+        return backgroundColor;
     }
 }

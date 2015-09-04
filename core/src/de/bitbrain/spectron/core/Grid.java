@@ -11,11 +11,13 @@ import aurelienribon.tweenengine.TweenEquations;
 import aurelienribon.tweenengine.TweenManager;
 import de.bitbrain.braingdx.GameObject;
 import de.bitbrain.braingdx.assets.SharedAssetManager;
+import de.bitbrain.braingdx.event.Events;
 import de.bitbrain.braingdx.tweens.ColorTween;
 import de.bitbrain.braingdx.tweens.GameObjectTween;
 import de.bitbrain.braingdx.tweens.SpriteTween;
 import de.bitbrain.spectron.Assets;
 import de.bitbrain.spectron.Colors;
+import de.bitbrain.spectron.event.EventType;
 
 public class Grid {
 
@@ -32,6 +34,8 @@ public class Grid {
     private int xCells, yCells;
 
     private final TweenManager tweenManager;
+
+    private Events events = Events.getInstance();
 
     public Grid(float x, float y, int xCells, int yCells, GameObjectFactory factory, TweenManager tweenManager) {
         this.x = x;
@@ -96,13 +100,18 @@ public class Grid {
     }
 
     public void setColor(float x, float y, Color color) {
-        GameObject cell = getCell(x, y);
-        tweenManager.killTarget(cell, GameObjectTween.R);
-        tweenManager.killTarget(cell, GameObjectTween.G);
-        tweenManager.killTarget(cell, GameObjectTween.B);
-        Tween.to(cell, GameObjectTween.R, 0.3f).target(color.r).ease(TweenEquations.easeInCubic).start(tweenManager);
-        Tween.to(cell, GameObjectTween.G, 0.3f).target(color.g).ease(TweenEquations.easeInCubic).start(tweenManager);
-        Tween.to(cell, GameObjectTween.B, 0.3f).target(color.b).ease(TweenEquations.easeInCubic).start(tweenManager);
+        if (isInRange(x, y)) {
+            GameObject cell = getCell(x, y);
+            if (!cell.getColor().equals(color)) {
+                events.fire(EventType.CELL_COLORED, color, cell.getColor());
+            }
+            tweenManager.killTarget(cell, GameObjectTween.R);
+            tweenManager.killTarget(cell, GameObjectTween.G);
+            tweenManager.killTarget(cell, GameObjectTween.B);
+            Tween.to(cell, GameObjectTween.R, 0.3f).target(color.r).ease(TweenEquations.easeInCubic).start(tweenManager);
+            Tween.to(cell, GameObjectTween.G, 0.3f).target(color.g).ease(TweenEquations.easeInCubic).start(tweenManager);
+            Tween.to(cell, GameObjectTween.B, 0.3f).target(color.b).ease(TweenEquations.easeInCubic).start(tweenManager);
+        }
     }
 
     public GameObject getCell(float x, float y) {
