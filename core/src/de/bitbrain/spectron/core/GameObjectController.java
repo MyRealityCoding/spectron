@@ -64,8 +64,10 @@ public class GameObjectController {
     }
 
     public void init() {
-        players.add(factory.createPlayer(1, 1, grid, Colors.ORANGE));
-        players.add(factory.createPlayer(8, 2, grid, Colors.BLUE));
+        players.add(factory.createPlayer("player1", 1, 1, grid, Colors.ORANGE));
+        players.add(factory.createPlayer("player2", 8, 2, grid, Colors.BLUE));
+        grid.getCell(players.get(0).getLeft(), players.get(0).getTop()).setId(players.get(0).getId());
+        grid.getCell(players.get(1).getLeft(), players.get(1).getTop()).setId(players.get(1).getId());
         updateColor(players.get(0));
         updateColor(players.get(1));
 
@@ -108,22 +110,24 @@ public class GameObjectController {
             if (!grid.isInRange(player.getLeft(), player.getTop())) {
                 return;
             }
+            final float time = grid.getCell(targetX, targetY) != null && !grid.getCell(targetX, targetY).getId().isEmpty() && !grid.getCell(targetX, targetY).getId().equals(player.getId()) ? TIME * 2 : TIME;
             if (targetX != player.getLeft()) {
-                Tween.to(player, GameObjectTween.POS_X, TIME).target(targetX).ease(TweenEquations.easeOutCubic).start(tweenManager);
+                Tween.to(player, GameObjectTween.POS_X, time).target(targetX).ease(TweenEquations.easeOutCubic).start(tweenManager);
             }
             if (targetY != player.getTop()) {
-                Tween.to(player, GameObjectTween.POS_Y, TIME).target(targetY).ease(TweenEquations.easeOutCubic).start(tweenManager);
+                Tween.to(player, GameObjectTween.POS_Y, time).target(targetY).ease(TweenEquations.easeOutCubic).start(tweenManager);
             }
-            animateJump(player);
+            animateJump(player, time);
             if (grid.isInRange(targetX, targetY)) {
+                grid.getCell(targetX, targetY).setId(player.getId());
                 grid.setColor(targetX, targetY, player.getColor());
             }
         }
     }
 
-    private void animateJump(final GameObject player) {
+    private void animateJump(final GameObject player, float time) {
         tweenManager.killTarget(player, GameObjectTween.OFFSET_Y);
-        Tween.to(player, GameObjectTween.OFFSET_Y, TIME / 3)
+        Tween.to(player, GameObjectTween.OFFSET_Y, time / 3)
                 .repeatYoyo(1, 0f)
                 .ease(TweenEquations.easeOutCubic)
                 .target(JUMP_HEIGHT)

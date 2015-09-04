@@ -28,8 +28,9 @@ public class GameObjectFactory {
         world.registerRenderer(GameObjectType.CELL, new CellRenderer());
     }
 
-    public GameObject createPlayer(int cellX, int cellY, Grid grid, Color color) {
+    public GameObject createPlayer(String id, int cellX, int cellY, Grid grid, Color color) {
         GameObject object = world.addObject();
+        object.setId(id);
         final int SIZE = 48;
         final float OFFSET_X = cellX * grid.getCellSize() + grid.getOffsetX() * cellX;
         final float OFFSET_Y = cellY * grid.getCellSize() + grid.getOffsetY() * cellY;
