@@ -154,6 +154,13 @@ public class Grid {
         Tween.to(cell, GameObjectTween.ALPHA, 0.7f).target(1f).delay(iteration * 0.05f).ease(TweenEquations.easeInOutCubic).start(tweenManager);
     }
 
+    public void setCellId(GameObject object) {
+        GameObject cell = getCell(object.getLeft(), object.getTop());
+        if (cell != null) {
+            cell.setId(object.getId());
+        }
+    }
+
     public void cleanUp() {
         int iteration = 0;
         for (int x = 0; x < cells.length; ++x) {

@@ -1,5 +1,6 @@
 package de.bitbrain.spectron.core;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 
 import net.engio.mbassy.listener.Handler;
@@ -10,7 +11,6 @@ import java.util.List;
 import aurelienribon.tweenengine.BaseTween;
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenCallback;
-import aurelienribon.tweenengine.TweenEquation;
 import aurelienribon.tweenengine.TweenEquations;
 import aurelienribon.tweenengine.TweenManager;
 import de.bitbrain.braingdx.GameObject;
@@ -55,6 +55,23 @@ public class GameObjectController {
         }
     }
 
+    private class PlayerData {
+
+        public int indexX, indexY;
+        public Color color;
+
+        public PlayerData(int indexX, int indexY, Color color) {
+            this.indexX = indexX;
+            this.indexY = indexY;
+            this.color = color;
+        }
+    }
+
+    private PlayerData[] data = new PlayerData[]{
+        new PlayerData(1, 1, Colors.ORANGE),
+        new PlayerData(8, 2, Colors.BLUE)
+    };
+
     public GameObjectController(Grid grid, TweenManager tweenManager, GameObjectFactory factory) {
         this.grid = grid;
         this.factory = factory;
@@ -64,23 +81,9 @@ public class GameObjectController {
     }
 
     public void init() {
-        players.add(factory.createPlayer("player1", 1, 1, grid, Colors.ORANGE));
-        players.add(factory.createPlayer("player2", 8, 2, grid, Colors.BLUE));
-        grid.getCell(players.get(0).getLeft(), players.get(0).getTop()).setId(players.get(0).getId());
-        grid.getCell(players.get(1).getLeft(), players.get(1).getTop()).setId(players.get(1).getId());
-        updateColor(players.get(0));
-        updateColor(players.get(1));
-
-        players.get(0).setOffset(0f, Config.APP_HEIGHT);
-        Tween.to(players.get(0), GameObjectTween.OFFSET_Y, 0.85f).delay(0.7f).target(0).ease(TweenEquations.easeOutBounce).start(tweenManager);
-        players.get(1).setOffset(0f, Config.APP_HEIGHT);
-        Tween.to(players.get(1), GameObjectTween.OFFSET_Y, 0.85f).delay(1.65f).target(0).ease(TweenEquations.easeOutBounce).setCallbackTriggers(TweenCallback.COMPLETE).setCallback(new TweenCallback() {
-
-            @Override
-            public void onEvent(int type, BaseTween<?> source) {
-                initialized = true;
-            }
-        }).start(tweenManager);
+        for (PlayerData playerData : data) {
+            registerNewPlayer(playerData.indexX, playerData.indexY, playerData.color);
+        }
     }
 
     public void move(int playerId, final Move move) {
@@ -185,6 +188,28 @@ public class GameObjectController {
             for (GameObject player : players) {
                 Tween.to(player, GameObjectTween.SCALE, 0.2f).target(0f).ease(TweenEquations.easeOutQuad).start(tweenManager);
             }
+        }
+    }
+
+    private void registerNewPlayer(int indexX, int indexY, Color color) {
+        GameObject player = factory.createPlayer("player" + players.size(), indexX, indexY, grid, color);
+        players.add(player);
+        grid.setCellId(player);
+        updateColor(player);
+        player.setOffset(0f, Config.APP_HEIGHT);
+        Tween tween = Tween.to(player, GameObjectTween.OFFSET_Y, 0.85f)
+             .delay((players.size() / 1.5f) + 0.7f)
+             .target(0)
+             .ease(TweenEquations.easeOutBounce)
+             .start(tweenManager);
+        if (players.size() == data.length) {
+            tween.setCallbackTriggers(TweenCallback.COMPLETE)
+                 .setCallback(new TweenCallback() {
+                     @Override
+                     public void onEvent(int type, BaseTween<?> source) {
+                         initialized = true;
+                     }
+                 });
         }
     }
 }
