@@ -8,17 +8,12 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FillViewport;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-import aurelienribon.tweenengine.Tween;
 import de.bitbrain.braingdx.AbstractScreen;
 import de.bitbrain.braingdx.BrainGdxGame;
-import de.bitbrain.braingdx.GameObject;
 import de.bitbrain.braingdx.assets.SharedAssetManager;
 import de.bitbrain.braingdx.fx.FX;
-import de.bitbrain.braingdx.tweens.SpriteTween;
 import de.bitbrain.spectron.Assets;
 import de.bitbrain.spectron.Colors;
 import de.bitbrain.spectron.Config;
@@ -56,25 +51,25 @@ public class IngameScreen extends AbstractScreen {
     @Override
     protected void beforeWorldRender(Batch batch, float delta) {
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            controller.move(0, GameObjectController.Move.TOP);
+            controller.move(0, GameObjectController.Move.UP);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             controller.move(0, GameObjectController.Move.LEFT);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            controller.move(0, GameObjectController.Move.BOTTOM);
+            controller.move(0, GameObjectController.Move.DOWN);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             controller.move(0, GameObjectController.Move.RIGHT);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            controller.move(1, GameObjectController.Move.TOP);
+            controller.move(1, GameObjectController.Move.UP);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             controller.move(1, GameObjectController.Move.LEFT);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            controller.move(1, GameObjectController.Move.BOTTOM);
+            controller.move(1, GameObjectController.Move.DOWN);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             controller.move(1, GameObjectController.Move.RIGHT);

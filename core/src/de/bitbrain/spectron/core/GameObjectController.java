@@ -40,9 +40,9 @@ public class GameObjectController {
 
     public static enum Move {
         LEFT(-1, 0),
-        TOP(0, 1),
+        UP(0, 1),
         RIGHT(1, 0),
-        BOTTOM(0, -1);
+        DOWN(0, -1);
 
         private Vector2 direction;
 
