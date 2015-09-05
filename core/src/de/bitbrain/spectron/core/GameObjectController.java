@@ -127,6 +127,7 @@ public class GameObjectController {
             if (grid.isInRange(targetX, targetY)) {
                 grid.getCell(targetX, targetY).setId(player.getId());
                 grid.setColor(targetX, targetY, player.getColor());
+                updateCellData(targetX, targetY, player);
             }
         }
     }
@@ -213,6 +214,17 @@ public class GameObjectController {
                         initialized = initializeValid;
                     }
                 });
+        updateCellData(player.getLeft(), player.getTop(), player);
+    }
 
+    private void updateCellData(float x, float y, GameObject object) {
+        GameObject oldData = grid.getData(x, y);
+        if (oldData != null) {
+            if (oldData.getType() == GameObjectType.PLAYER && !oldData.getId().equals(object.getId())) {
+                events.fire(EventType.GAME_OVER, oldData);
+            }
+        }
+        grid.setData(object.getLeft(), object.getTop(), null);
+        grid.setData(x, y, object);
     }
 }

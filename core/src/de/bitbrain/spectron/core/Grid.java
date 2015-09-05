@@ -108,6 +108,23 @@ public class Grid {
         return isInRange(getLocalIndexX(x), getLocalIndexY(y));
     }
 
+    public boolean hasData(float x, float y) {
+        CellData data = getDataInternally(x, y);
+        return data != null && data.data != null;
+    }
+
+    public void setData(float x, float y, GameObject object) {
+        CellData data = getDataInternally(x, y);
+        if (data != null) {
+            data.data = object;
+        }
+    }
+
+    public GameObject getData(float x, float y) {
+        CellData data = getDataInternally(x, y);
+        return data != null ? data.data : null;
+    }
+
     public void setColor(float x, float y, Color color) {
         if (isInRange(x, y)) {
             GameObject cell = getCell(x, y);
@@ -124,8 +141,13 @@ public class Grid {
     }
 
     public GameObject getCell(float x, float y) {
+        CellData data = getDataInternally(x, y);
+        return data != null ? data.cell : null;
+    }
+
+    private CellData getDataInternally(float x, float y) {
         if (isInRange(x, y)) {
-            return cells[getLocalIndexX(x)][getLocalIndexY(y)].cell;
+            return cells[getLocalIndexX(x)][getLocalIndexY(y)];
         } else {
             return null;
         }
@@ -185,7 +207,7 @@ public class Grid {
         for (int x = 0; x < cells.length; ++x) {
             for (int y = 0; y < cells[x].length; ++y) {
                 CellData data = cells[x][y];
-                Tween.to(data.cell, GameObjectTween.SCALE, 0.2f).target(0).delay(iteration * 0.01f).start(tweenManager);
+                Tween.to(data.cell, GameObjectTween.SCALE, 0.2f).target(0).delay(0.5f + iteration * 0.01f).start(tweenManager);
                 iteration++;
             }
         }
