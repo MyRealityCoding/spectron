@@ -15,6 +15,8 @@ import net.engio.mbassy.listener.Handler;
 import java.util.Map;
 
 import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.TweenEquation;
+import aurelienribon.tweenengine.TweenEquations;
 import de.bitbrain.braingdx.AbstractScreen;
 import de.bitbrain.braingdx.BrainGdxGame;
 import de.bitbrain.braingdx.assets.SharedAssetManager;
@@ -117,9 +119,9 @@ public class IngameScreen extends AbstractScreen {
             float totalCells = grid.getXCells() * grid.getYCells();
             color.lerp(entry.getKey(), (float)entry.getValue() / totalCells);
         }
-        Tween.to(backgroundColor, ColorTween.R, 0.5f).target(color.r).start(tweenManager);
-        Tween.to(backgroundColor, ColorTween.G, 0.5f).target(color.g).start(tweenManager);
-        Tween.to(backgroundColor, ColorTween.B, 0.5f).target(color.b).start(tweenManager);
+        Tween.to(backgroundColor, ColorTween.R, 0.75f).target(color.r).start(tweenManager);
+        Tween.to(backgroundColor, ColorTween.G, 0.75f).target(color.g).start(tweenManager);
+        Tween.to(backgroundColor, ColorTween.B, 0.75f).target(color.b).start(tweenManager);
     }
 
     private Color getColorByDistribution() {

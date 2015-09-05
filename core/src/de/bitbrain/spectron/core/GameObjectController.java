@@ -15,6 +15,7 @@ import aurelienribon.tweenengine.TweenEquations;
 import aurelienribon.tweenengine.TweenManager;
 import de.bitbrain.braingdx.GameObject;
 import de.bitbrain.braingdx.event.Events;
+import de.bitbrain.braingdx.fx.FX;
 import de.bitbrain.braingdx.tweens.GameObjectTween;
 import de.bitbrain.spectron.Colors;
 import de.bitbrain.spectron.Config;
@@ -35,6 +36,8 @@ public class GameObjectController {
     private List<GameObject> players;
 
     private Events events = Events.getInstance();
+
+    private FX fx = FX.getInstance();
 
     private boolean initialized = false;
 
@@ -202,14 +205,14 @@ public class GameObjectController {
              .target(0)
              .ease(TweenEquations.easeOutBounce)
              .start(tweenManager);
-        if (players.size() == data.length) {
-            tween.setCallbackTriggers(TweenCallback.COMPLETE)
-                 .setCallback(new TweenCallback() {
-                     @Override
-                     public void onEvent(int type, BaseTween<?> source) {
-                         initialized = true;
-                     }
-                 });
-        }
+        final boolean initializeValid = players.size() == data.length;
+        tween.setCallbackTriggers(TweenCallback.COMPLETE)
+                .setCallback(new TweenCallback() {
+                    @Override
+                    public void onEvent(int type, BaseTween<?> source) {
+                        initialized = initializeValid;
+                    }
+                });
+
     }
 }

@@ -25,9 +25,18 @@ public class Grid {
 
     public static final float SCALE = 80f;
 
+    private class CellData {
+        public GameObject cell;
+        public GameObject data;
+
+        public CellData(GameObject cell) {
+            this.cell = cell;
+        }
+    }
+
     private final GameObjectFactory factory;
 
-    private GameObject[][] cells;
+    private CellData[][] cells;
 
     private float x, y;
 
@@ -116,20 +125,20 @@ public class Grid {
 
     public GameObject getCell(float x, float y) {
         if (isInRange(x, y)) {
-            return cells[getLocalIndexX(x)][getLocalIndexY(y)];
+            return cells[getLocalIndexX(x)][getLocalIndexY(y)].cell;
         } else {
             return null;
         }
     }
 
     private void prepare(int width, int height, TweenManager tweenManager) {
-        cells = new GameObject[width][height];
+        cells = new CellData[width][height];
         int iteration = 0;
         for (int x = 0; x < cells.length; ++x) {
             for (int y = 0; y < cells[x].length; ++y) {
                 GameObject cell = factory.createCell();
-                cells[x][y] = cell;
-                cells[x][y].setZIndex(-iteration);
+                cells[x][y] = new CellData(cell);
+                cell.setZIndex(-iteration);
                 prepareCell(x, y, iteration);
                 iteration++;
             }
@@ -153,7 +162,8 @@ public class Grid {
     }
 
     private void prepareCell(int x, int y, int iteration) {
-        GameObject cell = cells[x][y];
+        CellData data = cells[x][y];
+        GameObject cell = data.cell;
         tweenManager.killTarget(cell, GameObjectTween.POS_Y);
         tweenManager.killTarget(cell, GameObjectTween.ALPHA);
         float targetY = y * SCALE + this.y + PADDING * y - cell.getOffset().y;
@@ -174,8 +184,8 @@ public class Grid {
         int iteration = 0;
         for (int x = 0; x < cells.length; ++x) {
             for (int y = 0; y < cells[x].length; ++y) {
-                GameObject cell = cells[x][y];
-                Tween.to(cell, GameObjectTween.SCALE, 0.2f).target(0).delay(iteration * 0.01f).start(tweenManager);
+                CellData data = cells[x][y];
+                Tween.to(data.cell, GameObjectTween.SCALE, 0.2f).target(0).delay(iteration * 0.01f).start(tweenManager);
                 iteration++;
             }
         }
