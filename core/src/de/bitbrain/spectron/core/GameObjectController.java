@@ -177,7 +177,14 @@ public class GameObjectController {
 
                     @Override
                     public void onEvent(int type, BaseTween<?> source) {
-                        events.fire(EventType.GAME_OVER, player);
+                        GameObject winner = null;
+                        for (GameObject candidate : players) {
+                            if (!candidate.getId().equals(player.getId())) {
+                                winner = candidate;
+                                break;
+                            }
+                        }
+                        events.fire(EventType.GAME_OVER, winner, player);
                     }
                 }).start(tweenManager);
             }
@@ -187,8 +194,9 @@ public class GameObjectController {
     @Handler
     public void onGameOver(Events.GdxEvent event) {
         if (event.isTypeOf(EventType.GAME_OVER)) {
+            GameObject winner = (GameObject) event.getPrimaryParam();
             this.initialized = false;
-            grid.cleanUp();
+            grid.destroy(winner.getColor());
             for (GameObject player : players) {
                 Tween.to(player, GameObjectTween.SCALE, 0.2f).target(0f).ease(TweenEquations.easeOutQuad).start(tweenManager);
             }
@@ -221,7 +229,7 @@ public class GameObjectController {
         GameObject oldData = grid.getData(x, y);
         if (oldData != null) {
             if (oldData.getType() == GameObjectType.PLAYER && !oldData.getId().equals(object.getId())) {
-                events.fire(EventType.GAME_OVER, oldData);
+                events.fire(EventType.GAME_OVER, object, oldData);
             }
         }
         grid.setData(object.getLeft(), object.getTop(), null);

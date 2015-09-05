@@ -202,12 +202,15 @@ public class Grid {
         }
     }
 
-    public void cleanUp() {
+    public void destroy(Color color) {
         int iteration = 0;
         for (int x = 0; x < cells.length; ++x) {
             for (int y = 0; y < cells[x].length; ++y) {
                 CellData data = cells[x][y];
-                Tween.to(data.cell, GameObjectTween.SCALE, 0.2f).target(0).delay(0.5f + iteration * 0.01f).start(tweenManager);
+                setColor(data.cell.getLeft(), data.cell.getTop() + data.cell.getHeight(), color);
+                Tween.to(data.cell, GameObjectTween.SCALE, 0.6f).target(0).delay(0.5f + 0.05f * iteration).start(tweenManager);
+                Tween.to(data.cell, GameObjectTween.ALPHA, 0.4f).target(0).delay(0.3f + 0.05f * iteration).start(tweenManager);
+                Tween.to(data.cell, GameObjectTween.POS_Y, 0.4f).target(-100).delay(0.3f + 0.05f * iteration).start(tweenManager);
                 iteration++;
             }
         }
