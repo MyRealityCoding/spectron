@@ -29,6 +29,7 @@ import de.bitbrain.spectron.Config;
 import de.bitbrain.spectron.core.GameObjectController;
 import de.bitbrain.spectron.core.GameObjectFactory;
 import de.bitbrain.spectron.core.Grid;
+import de.bitbrain.spectron.event.EventType;
 import de.bitbrain.spectron.util.ColorDistributionUtil;
 
 public class IngameScreen extends AbstractScreen {
@@ -61,10 +62,12 @@ public class IngameScreen extends AbstractScreen {
         grid.setPosition(width / 2f - grid.getWidth() / 2f, 40f);
         controller = new GameObjectController(grid, tweenManager, factory);
         fx.fadeIn(1.5f);
-        backgroundColor = Color.WHITE;
+        backgroundColor = Color.WHITE.cpy();
         controller.init();
         events.register(this);
     }
+
+
 
     @Override
     protected void beforeWorldRender(Batch batch, float delta) {
@@ -113,15 +116,20 @@ public class IngameScreen extends AbstractScreen {
     }
 
     @Handler
-    public void onColorChange(Events.GdxEvent event) {
-        Color color = Color.WHITE.cpy();
-        for (Map.Entry<Color, Integer> entry : colorDistributionUtil.getDistribution().entrySet()) {
-            float totalCells = grid.getXCells() * grid.getYCells();
-            color.lerp(entry.getKey(), (float)entry.getValue() / totalCells);
+    public void onEvent(Events.GdxEvent event) {
+        if (event.isTypeOf(EventType.CELL_COLORED)) {
+            Color color = Color.WHITE.cpy();
+            for (Map.Entry<Color, Integer> entry : colorDistributionUtil.getDistribution().entrySet()) {
+                float totalCells = grid.getXCells() * grid.getYCells();
+                color.lerp(entry.getKey(), (float) entry.getValue() / totalCells);
+            }
+            Tween.to(backgroundColor, ColorTween.R, 0.75f).target(color.r).start(tweenManager);
+            Tween.to(backgroundColor, ColorTween.G, 0.75f).target(color.g).start(tweenManager);
+            Tween.to(backgroundColor, ColorTween.B, 0.75f).target(color.b).start(tweenManager);
+        } else  if (event.isTypeOf(EventType.RESTART_GAME)) {
+            colorDistributionUtil.clear();
+            game.setScreen(new IngameScreen(game));
         }
-        Tween.to(backgroundColor, ColorTween.R, 0.75f).target(color.r).start(tweenManager);
-        Tween.to(backgroundColor, ColorTween.G, 0.75f).target(color.g).start(tweenManager);
-        Tween.to(backgroundColor, ColorTween.B, 0.75f).target(color.b).start(tweenManager);
     }
 
     private Color getColorByDistribution() {

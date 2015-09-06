@@ -200,6 +200,13 @@ public class GameObjectController {
             for (GameObject player : players) {
                 Tween.to(player, GameObjectTween.SCALE, 0.2f).target(0f).ease(TweenEquations.easeOutQuad).start(tweenManager);
             }
+            Tween.to(winner, GameObjectTween.POS_Y, 1f).target(0f).delay(1f).setCallbackTriggers(TweenCallback.COMPLETE).setCallback(new TweenCallback() {
+
+                @Override
+                public void onEvent(int type, BaseTween<?> source) {
+                    events.fire(EventType.RESTART_GAME, null);
+                }
+            }).start(tweenManager);
         }
     }
 
