@@ -177,14 +177,16 @@ public class GameObjectController {
 
                     @Override
                     public void onEvent(int type, BaseTween<?> source) {
-                        GameObject winner = null;
-                        for (GameObject candidate : players) {
-                            if (!candidate.getId().equals(player.getId())) {
-                                winner = candidate;
-                                break;
+                        if (initialized) {
+                            GameObject winner = null;
+                            for (GameObject candidate : players) {
+                                if (!candidate.getId().equals(player.getId())) {
+                                    winner = candidate;
+                                    break;
+                                }
                             }
+                            events.fire(EventType.GAME_OVER, winner, player);
                         }
-                        events.fire(EventType.GAME_OVER, winner, player);
                     }
                 }).start(tweenManager);
             }
@@ -200,7 +202,8 @@ public class GameObjectController {
             for (GameObject player : players) {
                 Tween.to(player, GameObjectTween.SCALE, 0.2f).target(0f).ease(TweenEquations.easeOutQuad).start(tweenManager);
             }
-            Tween.to(winner, GameObjectTween.POS_Y, 1f).target(0f).delay(1f).setCallbackTriggers(TweenCallback.COMPLETE).setCallback(new TweenCallback() {
+            tweenManager.killTarget(winner, GameObjectTween.POS_X);
+            Tween.to(winner, GameObjectTween.POS_X, 1f).target(0f).delay(1f).setCallbackTriggers(TweenCallback.COMPLETE).setCallback(new TweenCallback() {
 
                 @Override
                 public void onEvent(int type, BaseTween<?> source) {
@@ -235,7 +238,7 @@ public class GameObjectController {
     private void updateCellData(float x, float y, GameObject object) {
         GameObject oldData = grid.getData(x, y);
         if (oldData != null) {
-            if (oldData.getType() == GameObjectType.PLAYER && !oldData.getId().equals(object.getId())) {
+            if (initialized && oldData.getType() == GameObjectType.PLAYER && !oldData.getId().equals(object.getId())) {
                 events.fire(EventType.GAME_OVER, object, oldData);
             }
         }

@@ -128,6 +128,7 @@ public class IngameScreen extends AbstractScreen {
             Tween.to(backgroundColor, ColorTween.B, 0.75f).target(color.b).start(tweenManager);
         } else  if (event.isTypeOf(EventType.RESTART_GAME)) {
             colorDistributionUtil.clear();
+            events.unregister(this);
             game.setScreen(new IngameScreen(game));
         }
     }
