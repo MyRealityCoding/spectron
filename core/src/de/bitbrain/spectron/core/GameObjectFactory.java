@@ -2,28 +2,19 @@ package de.bitbrain.spectron.core;
 
 import com.badlogic.gdx.graphics.Color;
 
-import aurelienribon.tweenengine.Tween;
-import aurelienribon.tweenengine.TweenEquations;
-import aurelienribon.tweenengine.TweenManager;
 import de.bitbrain.braingdx.GameObject;
 import de.bitbrain.braingdx.GameWorld;
-import de.bitbrain.braingdx.graphics.SpriteRenderer;
-import de.bitbrain.braingdx.tweens.GameObjectTween;
 import de.bitbrain.spectron.Assets;
 import de.bitbrain.spectron.Colors;
-import de.bitbrain.spectron.Config;
 import de.bitbrain.spectron.graphics.CellRenderer;
 import de.bitbrain.spectron.graphics.ObstacleRenderer;
 
 public class GameObjectFactory {
 
-    private TweenManager tweenManager;
-
     private GameWorld world;
 
-    public GameObjectFactory(TweenManager tweenManager, GameWorld world) {
+    public GameObjectFactory(GameWorld world) {
         this.world = world;
-        this.tweenManager = tweenManager;
         world.registerRenderer(GameObjectType.PLAYER, new ObstacleRenderer(Assets.Textures.BLOCK));
         world.registerRenderer(GameObjectType.CELL, new CellRenderer());
     }

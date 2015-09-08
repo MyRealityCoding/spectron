@@ -57,10 +57,10 @@ public class IngameScreen extends AbstractScreen {
     protected void onCreateStage(Stage stage, int width, int height) {
         sprite = new Sprite(SharedAssetManager.get(Assets.Textures.BACKGROUND, Texture.class));
         fx.setFadeColor(Color.BLACK);
-        GameObjectFactory factory = new GameObjectFactory(tweenManager, world);
-        grid = new Grid(0, 0, 10, 4, factory, tweenManager);
+        GameObjectFactory factory = new GameObjectFactory(world);
+        grid = new Grid(0, 0, 10, 4, factory);
         grid.setPosition(width / 2f - grid.getWidth() / 2f, 40f);
-        controller = new GameObjectController(grid, tweenManager, factory);
+        controller = new GameObjectController(grid, factory);
         fx.fadeIn(1.5f);
         backgroundColor = Color.WHITE.cpy();
         controller.init();

@@ -14,6 +14,7 @@ import de.bitbrain.braingdx.assets.SharedAssetManager;
 import de.bitbrain.braingdx.event.Events;
 import de.bitbrain.braingdx.tweens.ColorTween;
 import de.bitbrain.braingdx.tweens.GameObjectTween;
+import de.bitbrain.braingdx.tweens.SharedTweenManager;
 import de.bitbrain.braingdx.tweens.SpriteTween;
 import de.bitbrain.spectron.Assets;
 import de.bitbrain.spectron.Colors;
@@ -42,16 +43,15 @@ public class Grid {
 
     private int xCells, yCells;
 
-    private final TweenManager tweenManager;
+    private final TweenManager tweenManager = SharedTweenManager.getInstance();
 
     private Events events = Events.getInstance();
 
-    public Grid(float x, float y, int xCells, int yCells, GameObjectFactory factory, TweenManager tweenManager) {
+    public Grid(float x, float y, int xCells, int yCells, GameObjectFactory factory) {
         this.x = x;
         this.y = y;
         this.xCells = xCells;
         this.yCells = yCells;
-        this.tweenManager = tweenManager;
         this.factory = factory;
         prepare(xCells, yCells, tweenManager);
     }

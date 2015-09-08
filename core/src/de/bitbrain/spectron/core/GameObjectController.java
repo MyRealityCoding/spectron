@@ -17,6 +17,7 @@ import de.bitbrain.braingdx.GameObject;
 import de.bitbrain.braingdx.event.Events;
 import de.bitbrain.braingdx.fx.FX;
 import de.bitbrain.braingdx.tweens.GameObjectTween;
+import de.bitbrain.braingdx.tweens.SharedTweenManager;
 import de.bitbrain.spectron.Colors;
 import de.bitbrain.spectron.Config;
 import de.bitbrain.spectron.event.EventType;
@@ -27,7 +28,7 @@ public class GameObjectController {
 
     private static final float JUMP_HEIGHT = 55f;
 
-    private final TweenManager tweenManager;
+    private final TweenManager tweenManager = SharedTweenManager.getInstance();
 
     private Grid grid;
 
@@ -75,10 +76,9 @@ public class GameObjectController {
         new PlayerData(8, 2, Colors.BLUE)
     };
 
-    public GameObjectController(Grid grid, TweenManager tweenManager, GameObjectFactory factory) {
+    public GameObjectController(Grid grid, GameObjectFactory factory) {
         this.grid = grid;
         this.factory = factory;
-        this.tweenManager = tweenManager;
         this.players = new ArrayList<GameObject>();
         events.register(this);
     }
