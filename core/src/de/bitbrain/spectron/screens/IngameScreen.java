@@ -30,6 +30,7 @@ import de.bitbrain.spectron.core.GameObjectController;
 import de.bitbrain.spectron.core.GameObjectFactory;
 import de.bitbrain.spectron.core.Grid;
 import de.bitbrain.spectron.event.EventType;
+import de.bitbrain.spectron.input.KeyboardInput;
 import de.bitbrain.spectron.util.ColorDistributionUtil;
 
 public class IngameScreen extends AbstractScreen {
@@ -65,39 +66,14 @@ public class IngameScreen extends AbstractScreen {
         backgroundColor = Color.WHITE.cpy();
         controller.init();
         events.register(this);
+        // Register inputs
+        input.addProcessor(new KeyboardInput(controller));
     }
 
 
 
     @Override
     protected void beforeWorldRender(Batch batch, float delta) {
-        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            controller.move(0, GameObjectController.Move.UP);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            controller.move(0, GameObjectController.Move.LEFT);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            controller.move(0, GameObjectController.Move.DOWN);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            controller.move(0, GameObjectController.Move.RIGHT);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            controller.move(1, GameObjectController.Move.UP);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            controller.move(1, GameObjectController.Move.LEFT);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            controller.move(1, GameObjectController.Move.DOWN);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            controller.move(1, GameObjectController.Move.RIGHT);
-        }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
-            fx.shake(40, 2f);
-        }
         sprite.setBounds(camera.position.x - Config.APP_WIDTH / 2f, camera.position.y - Config.APP_HEIGHT / 2f, Config.APP_WIDTH, Config.APP_HEIGHT);
         sprite.setColor(getColorByDistribution());
         sprite.draw(batch);
