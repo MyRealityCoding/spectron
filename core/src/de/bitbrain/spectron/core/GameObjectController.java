@@ -18,7 +18,6 @@ import de.bitbrain.braingdx.event.Events;
 import de.bitbrain.braingdx.fx.FX;
 import de.bitbrain.braingdx.tweens.GameObjectTween;
 import de.bitbrain.braingdx.tweens.SharedTweenManager;
-import de.bitbrain.spectron.Colors;
 import de.bitbrain.spectron.Config;
 import de.bitbrain.spectron.event.EventType;
 
@@ -59,23 +58,6 @@ public class GameObjectController {
         }
     }
 
-    private class PlayerData {
-
-        public int indexX, indexY;
-        public Color color;
-
-        public PlayerData(int indexX, int indexY, Color color) {
-            this.indexX = indexX;
-            this.indexY = indexY;
-            this.color = color;
-        }
-    }
-
-    private PlayerData[] data = new PlayerData[]{
-        new PlayerData(1, 1, Colors.ORANGE),
-        new PlayerData(8, 2, Colors.BLUE)
-    };
-
     public GameObjectController(Grid grid, GameObjectFactory factory) {
         this.grid = grid;
         this.factory = factory;
@@ -84,8 +66,8 @@ public class GameObjectController {
     }
 
     public void init() {
-        for (PlayerData playerData : data) {
-            registerNewPlayer(playerData.indexX, playerData.indexY, playerData.color);
+        for (Player player : Player.values()) {
+            registerNewPlayer(player.getStartX(), player.getStartY(), player.getColor());
         }
     }
 
@@ -224,7 +206,7 @@ public class GameObjectController {
              .target(0)
              .ease(TweenEquations.easeOutBounce)
              .start(tweenManager);
-        final boolean initializeValid = players.size() == data.length;
+        final boolean initializeValid = players.size() == Player.values().length;
         tween.setCallbackTriggers(TweenCallback.COMPLETE)
                 .setCallback(new TweenCallback() {
                     @Override

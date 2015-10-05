@@ -1,7 +1,6 @@
 package de.bitbrain.spectron.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -17,8 +16,6 @@ import net.engio.mbassy.listener.Handler;
 import java.util.Map;
 
 import aurelienribon.tweenengine.Tween;
-import aurelienribon.tweenengine.TweenEquation;
-import aurelienribon.tweenengine.TweenEquations;
 import de.bitbrain.braingdx.AbstractScreen;
 import de.bitbrain.braingdx.BrainGdxGame;
 import de.bitbrain.braingdx.assets.SharedAssetManager;
@@ -31,7 +28,7 @@ import de.bitbrain.spectron.Config;
 import de.bitbrain.spectron.core.GameObjectController;
 import de.bitbrain.spectron.core.GameObjectFactory;
 import de.bitbrain.spectron.core.Grid;
-import de.bitbrain.spectron.core.PlayerData;
+import de.bitbrain.spectron.core.Player;
 import de.bitbrain.spectron.event.EventType;
 import de.bitbrain.spectron.input.GamepadInput;
 import de.bitbrain.spectron.input.KeyboardInput;
@@ -78,7 +75,7 @@ public class IngameScreen extends AbstractScreen {
         // Setup UI
         Table root = new Table();
         root.setFillParent(true);
-        root.left().top().add(new PlayerWidget(new PlayerData(Colors.ORANGE))).pad(20f, 60f, 0f, 0f);
+        root.left().top().add(new PlayerWidget(Player.PLAYER1)).pad(20f, 60f, 0f, 0f);
         stage.addActor(root);
     }
 
