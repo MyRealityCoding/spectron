@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -30,9 +31,11 @@ import de.bitbrain.spectron.Config;
 import de.bitbrain.spectron.core.GameObjectController;
 import de.bitbrain.spectron.core.GameObjectFactory;
 import de.bitbrain.spectron.core.Grid;
+import de.bitbrain.spectron.core.PlayerData;
 import de.bitbrain.spectron.event.EventType;
 import de.bitbrain.spectron.input.GamepadInput;
 import de.bitbrain.spectron.input.KeyboardInput;
+import de.bitbrain.spectron.ui.PlayerWidget;
 import de.bitbrain.spectron.util.ColorDistributionUtil;
 
 public class IngameScreen extends AbstractScreen {
@@ -71,6 +74,12 @@ public class IngameScreen extends AbstractScreen {
         // Register inputs
         input.addProcessor(new KeyboardInput(controller));
         Controllers.addListener(new GamepadInput(controller));
+
+        // Setup UI
+        Table root = new Table();
+        root.setFillParent(true);
+        root.left().top().add(new PlayerWidget(new PlayerData(Colors.ORANGE))).pad(20f, 60f, 0f, 0f);
+        stage.addActor(root);
     }
 
     @Override
