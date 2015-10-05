@@ -73,10 +73,14 @@ public class IngameScreen extends AbstractScreen {
         Controllers.addListener(new GamepadInput(controller));
 
         // Setup UI
-        Table root = new Table();
-        root.setFillParent(true);
-        root.left().top().add(new PlayerWidget(Player.PLAYER1)).pad(20f, 60f, 0f, 0f);
-        stage.addActor(root);
+        Table player1Root = new Table();
+        player1Root.setFillParent(true);
+        player1Root.left().top().add(new PlayerWidget(Player.PLAYER1)).pad(20f, 60f, 0f, 0f);
+        stage.addActor(player1Root);
+        Table player2Root = new Table();
+        player2Root.setFillParent(true);
+        player2Root.right().top().add(new PlayerWidget(Player.PLAYER2)).pad(20f, 0f, 0f, 60f);
+        stage.addActor(player2Root);
     }
 
     @Override
