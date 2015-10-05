@@ -111,6 +111,11 @@ public class GameObjectController {
             }
             animateJump(player, time);
             if (grid.isInRange(targetX, targetY)) {
+
+                if (!player.getId().equals(grid.getCell(targetX, targetY).getId())) {
+                    Player data = playerMap.get(player.getId());
+                    data.addPoints(150);
+                }
                 grid.getCell(targetX, targetY).setId(player.getId());
                 grid.setColor(targetX, targetY, player.getColor());
                 updateCellData(targetX, targetY, player);
@@ -156,8 +161,6 @@ public class GameObjectController {
                             .target(playerTarget).repeatYoyo(1, 0f).ease(TweenEquations.easeOutCubic)
                             .start(tweenManager);
                 }
-                Player data = playerMap.get(player.getId());
-                data.addPoints(100);
             } else {
                 float targetY = player.getTop() - Config.APP_HEIGHT / 1.5f;
                 player.setZIndex(-100);
