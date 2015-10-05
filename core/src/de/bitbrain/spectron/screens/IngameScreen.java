@@ -2,6 +2,7 @@ package de.bitbrain.spectron.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -30,6 +31,7 @@ import de.bitbrain.spectron.core.GameObjectController;
 import de.bitbrain.spectron.core.GameObjectFactory;
 import de.bitbrain.spectron.core.Grid;
 import de.bitbrain.spectron.event.EventType;
+import de.bitbrain.spectron.input.GamepadInput;
 import de.bitbrain.spectron.input.KeyboardInput;
 import de.bitbrain.spectron.util.ColorDistributionUtil;
 
@@ -68,9 +70,14 @@ public class IngameScreen extends AbstractScreen {
         events.register(this);
         // Register inputs
         input.addProcessor(new KeyboardInput(controller));
+        Controllers.addListener(new GamepadInput(controller));
     }
 
-
+    @Override
+    public void dispose() {
+        super.dispose();
+        Controllers.clearListeners();
+    }
 
     @Override
     protected void beforeWorldRender(Batch batch, float delta) {
