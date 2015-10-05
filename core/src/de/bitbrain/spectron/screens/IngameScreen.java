@@ -88,6 +88,7 @@ public class IngameScreen extends AbstractScreen {
     public void dispose() {
         super.dispose();
         Controllers.clearListeners();
+        controller.dispose();
     }
 
     @Override
@@ -123,6 +124,7 @@ public class IngameScreen extends AbstractScreen {
         } else  if (event.isTypeOf(EventType.RESTART_GAME)) {
             colorDistributionUtil.clear();
             events.unregister(this);
+            controller.dispose();
             game.setScreen(new IngameScreen(game));
         }
     }

@@ -36,4 +36,12 @@ public enum Player {
     public int getStartY() {
         return startY;
     }
+
+    public void addPoints(int points) {
+        this.points += Math.abs(points);
+    }
+
+    public void clear() {
+        this.points = 0;
+    }
 }

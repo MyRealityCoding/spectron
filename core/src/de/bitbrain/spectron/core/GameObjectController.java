@@ -6,7 +6,9 @@ import com.badlogic.gdx.math.Vector2;
 import net.engio.mbassy.listener.Handler;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import aurelienribon.tweenengine.BaseTween;
 import aurelienribon.tweenengine.Tween;
@@ -39,6 +41,8 @@ public class GameObjectController {
 
     private FX fx = FX.getInstance();
 
+    private Map<String, Player> playerMap = new HashMap<String, Player>();
+
     private boolean initialized = false;
 
     public static enum Move {
@@ -67,7 +71,7 @@ public class GameObjectController {
 
     public void init() {
         for (Player player : Player.values()) {
-            registerNewPlayer(player.getStartX(), player.getStartY(), player.getColor());
+            registerNewPlayer(player);
         }
     }
 
@@ -152,6 +156,8 @@ public class GameObjectController {
                             .target(playerTarget).repeatYoyo(1, 0f).ease(TweenEquations.easeOutCubic)
                             .start(tweenManager);
                 }
+                Player data = playerMap.get(player.getId());
+                data.addPoints(100);
             } else {
                 float targetY = player.getTop() - Config.APP_HEIGHT / 1.5f;
                 player.setZIndex(-100);
@@ -195,8 +201,15 @@ public class GameObjectController {
         }
     }
 
-    private void registerNewPlayer(int indexX, int indexY, Color color) {
-        GameObject player = factory.createPlayer("player" + players.size(), indexX, indexY, grid, color);
+    public void dispose() {
+        for (Player player : Player.values()) {
+            player.clear();
+        }
+        events.unregister(this);
+    }
+
+    private void registerNewPlayer(Player data) {
+        GameObject player = factory.createPlayer("player" + players.size(), data.getStartX(), data.getStartY(), grid, data.getColor());
         players.add(player);
         grid.setCellId(player);
         updateColor(player);
@@ -215,6 +228,7 @@ public class GameObjectController {
                     }
                 });
         updateCellData(player.getLeft(), player.getTop(), player);
+        playerMap.put(player.getId(), data);
     }
 
     private void updateCellData(float x, float y, GameObject object) {
