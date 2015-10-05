@@ -5,6 +5,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.utils.Align;
 
+import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.TweenEquation;
+import aurelienribon.tweenengine.TweenEquations;
+import aurelienribon.tweenengine.TweenManager;
+import de.bitbrain.braingdx.tweens.SharedTweenManager;
+import de.bitbrain.braingdx.tweens.ValueTween;
+import de.bitbrain.braingdx.util.ValueProvider;
 import de.bitbrain.spectron.Colors;
 import de.bitbrain.spectron.core.Player;
 
@@ -12,6 +19,14 @@ public class PlayerWidget extends VerticalGroup {
 
     private final Label points;
     private Player data;
+    private ValueProvider pointValue = new ValueProvider();
+    private int lastPoints = 0;
+
+    private TweenManager tweenManager = SharedTweenManager.getInstance();
+
+    static {
+        Tween.registerAccessor(ValueProvider.class, new ValueTween());
+    }
 
     public PlayerWidget(Player data) {
         this.data = data;
@@ -26,7 +41,12 @@ public class PlayerWidget extends VerticalGroup {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        points.setText(String.valueOf(data.getPoints()));
+        if (lastPoints != data.getPoints()) {
+            lastPoints = data.getPoints();
+            tweenManager.killTarget(pointValue);
+            Tween.to(pointValue, ValueTween.VALUE, 0.4f).target(lastPoints).ease(TweenEquations.easeInOutCubic).start(tweenManager);
+        }
+        points.setText(String.valueOf(Math.round(pointValue.getValue())));
         super.draw(batch, parentAlpha);
     }
 }
