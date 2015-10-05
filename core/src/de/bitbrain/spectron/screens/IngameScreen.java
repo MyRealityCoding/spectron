@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -75,11 +76,11 @@ public class IngameScreen extends AbstractScreen {
         // Setup UI
         Table player1Root = new Table();
         player1Root.setFillParent(true);
-        player1Root.left().top().add(new PlayerWidget(Player.PLAYER1)).pad(20f, 60f, 0f, 0f);
+        player1Root.left().top().add(new PlayerWidget(Player.PLAYER1).align(Align.left)).pad(20f, 70f, 0f, 0f);
         stage.addActor(player1Root);
         Table player2Root = new Table();
         player2Root.setFillParent(true);
-        player2Root.right().top().add(new PlayerWidget(Player.PLAYER2)).pad(20f, 0f, 0f, 60f);
+        player2Root.right().top().add(new PlayerWidget(Player.PLAYER2).align(Align.right)).pad(20f, 0f, 0f, 70f);
         stage.addActor(player2Root);
     }
 
