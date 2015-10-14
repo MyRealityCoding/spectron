@@ -117,6 +117,7 @@ public class GameObjectController {
                     data.addPoints(150);
                 }
                 grid.getCell(targetX, targetY).setId(player.getId());
+                player.setZIndex(grid.getCell(targetX, targetY).getZIndex() + 1);
                 grid.setColor(targetX, targetY, player.getColor());
                 updateCellData(targetX, targetY, player);
             }

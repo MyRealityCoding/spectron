@@ -160,7 +160,7 @@ public class Grid {
             for (int y = 0; y < cells[x].length; ++y) {
                 GameObject cell = factory.createCell();
                 cells[x][y] = new CellData(cell);
-                cell.setZIndex(-iteration);
+                cell.setZIndex(-iteration*(y*10));
                 prepareCell(x, y, iteration);
                 iteration++;
             }
